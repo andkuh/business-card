@@ -10,7 +10,7 @@ export class CV extends Component {
     constructor(props) {
         super(props);
 
-        this.personId = "1";
+        this.personId = 1; // Oh-oh, naughty magic numbers to get Andrei from backend :)
         
         this.state = {person: {}, employments: [], technologies: [], hobbies: [], education:[]};
     }
