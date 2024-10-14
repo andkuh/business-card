@@ -1,0 +1,13 @@
+﻿.personal{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.img{
+    border-radius: 50%;
+}
+
+img{
+    border-radius: 50%;
+}

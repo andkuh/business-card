@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import './CV.css';
-import {formatDateToMonthAndYear} from "../FormatDate";
+import Employment from "./Employment";
+import Person from "./Person";
 
 export class CV extends Component {
 
@@ -9,15 +10,14 @@ export class CV extends Component {
 
         this.state = {person: {}, employments: [], technologies: []};
     }
-
-
+    
     componentDidMount() {
         fetch("/api/v2/people/1")
             .then(async s => {
 
                 const data = await s.json();
 
-                this.setState({person: data})
+                this.setState({person: data});
             });
 
         fetch("/api/people/1/employments")
@@ -38,22 +38,7 @@ export class CV extends Component {
     render() {
         return <div>
             <header className="section-header">
-                <div className="personal">
-                    {this.state.person.id &&
-                    <div >
-                        <h1>{this.state.person.firstName} {this.state.person.lastName}</h1>
-                        <p>{this.state.person.specialization}, {this.state.person.yearsOld} y.o.</p>
-                        <p>{this.state.person.location}</p>
-                    </div>
-                    }
-
-                </div>
-                {this.state.person.image &&
-                <div className="img">
-                    <img src={"data:" + this.state.person.image.contentType + ";base64, " + this.state.person.image.bytes}/>
-                </div>
-                }
-
+                {this.state && <Person person={this.state.person}/>} 
             </header>
 
             <section className="section">
@@ -63,62 +48,15 @@ export class CV extends Component {
 
             <section className="section">
                 <h2>Experience</h2>
-                <div className="experience" id="experience">
-
+                <div>
                     {this.state.employments.map(e =>
-                        <div className="employment">
-                            <div>
-                                <h4>{e.employer.name}</h4>
-                                <p>{formatDateToMonthAndYear(e.startDate)} - {e.endDate ? formatDateToMonthAndYear(e.endDate) : 'Now'} </p>
-                            </div>
-
-
-                            {e.careerSteps.map(c =>
-                                <div>
-                                    <span
-                                        className="job-title">{c.title}</span>, {formatDateToMonthAndYear(c.startDate)}
-                                    <div className="projects">
-                                        Projects:
-                                    </div>
-                                    <ul>
-                                        {c.assignments.map(a =>
-                                            <li key={a.name}>
-                                                {a.name} ({formatDateToMonthAndYear(a.startDate)} - {formatDateToMonthAndYear(a.endDate)})
-                                                <div className="assignment-summary">
-                                                    {a.description}
-                                                </div>
-                                                <div className="duties">
-                                                    
-                                                    {a.duties.map((duty) => [
-                                                        <span>   {duty} <br/></span>
-                                                    ])}
-                                                </div>
-                                                
-                                                <div className="assignment-summary">
-                                                    Tech:&nbsp;
-                                                    {a.technologies.map((tech, i) => [
-                                                        i > 0 && ", ",
-                                                        <span>{tech}</span>
-                                                    ])}
-                                                </div>
-
-
-                                                
-                                            </li>
-                                        )}
-                                    </ul>
-                                </div>
-                            )}
-
-                        </div>
+                        <Employment employment={e}/>
                     )}
-
                 </div>
             </section>
-
-
-            <section className="section" id="technologies">
-                <a name="technologies"><h2 id="technologies">Skills / Technologies</h2></a>
+            
+            <section className="section">
+                <h2 id="technologies">Skills / Technologies</h2>
                 <ul>
                     {this.state.technologies.map(s =>
                         <li key={s.title}>

@@ -1,0 +1,8 @@
+﻿.employment{
+
+}
+
+.employment:not(:last-child){
+    border-bottom: 2px dotted #ccc;
+    margin-bottom: 16px;
+}
