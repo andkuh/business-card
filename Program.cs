@@ -1,18 +1,15 @@
 using BusinessCard;
+using BusinessCard.Employers.Endpoints;
+using BusinessCard.Employers.UseCases.GetEmployments;
 using BusinessCard.Infrastructure;
-using BusinessCard.People.Endpoints;
-using BusinessCard.People.Records;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json.Serialization;
 using Router;
 using Router.Configuration;
 using Router.Configuration.Formatting;
-using Router.Contracts;
-using Router.Data.Configuration;
 using Router.Data.EntityFramework;
 using Router.Data.Extension;
 using Router.DependencyInjection.BuiltIn;
@@ -23,6 +20,8 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllersWithViews();
 builder.Services.AddControllers();
+builder.Services.AddSingleton<IModelToDtoMapper, ModelToDtoMapper>();
+builder.Services.AddScoped<IGetEmployments, GetEmployments>();
 
 //builder.Services.AddDbContext<Ctx>(s => s.UseInMemoryDatabase("Context"));
 
@@ -34,7 +33,6 @@ builder.Services.AddApiExpress(s =>
             data =>
                 data.UseDbContext<Ctx>(context =>
                 {
-                    //context.UseSqlServer(builder.Configuration.GetConnectionString("BusinessCard"));
                     context.UseInMemoryDatabase("BusinessCard");
                 })
         );
