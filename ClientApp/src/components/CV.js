@@ -5,14 +5,18 @@ import Person from "./Person";
 
 export class CV extends Component {
 
+    personId;
+    
     constructor(props) {
         super(props);
 
-        this.state = {person: {}, employments: [], technologies: []};
+        this.personId = "1";
+        
+        this.state = {person: {}, employments: [], technologies: [], hobbies: [], education:[]};
     }
     
     componentDidMount() {
-        fetch("/api/v2/people/1")
+        fetch("/api/v2/people/" + this.personId)
             .then(async s => {
 
                 const data = await s.json();
@@ -20,7 +24,7 @@ export class CV extends Component {
                 this.setState({person: data});
             });
 
-        fetch("/api/people/1/employments")
+        fetch("/api/people/" + this.personId + "/employments")
             .then(async resp => {
                 const data = await resp.json();
 
@@ -32,6 +36,18 @@ export class CV extends Component {
                 const data = await resp.json();
 
                 this.setState({technologies: data.items})
+            });
+        
+        fetch("/api/v2/people/" + this.personId + "/education")
+            .then(async resp => {
+                const data = await resp.json();
+                this.setState({education: data.items});
+            })
+
+        fetch("/api/v2/people/" + this.personId + "/hobbies")
+            .then(async resp => {
+                const data = await resp.json();
+                this.setState({hobbies: data.items});
             })
     }
 
@@ -68,15 +84,20 @@ export class CV extends Component {
 
             <section className="section">
                 <h2>Education</h2>
-                <p>Bachelor's Degree in Finance - BSTU (2010)</p>
+                {this.state.education.map(education=> 
+                
+                    <p>{education.name} - {education.inititution} ({education.yearStarted} - {education.yearFinished})</p>
+                )}
+                
             </section>
 
             <section className="section">
                 <h2>Personal</h2>
                 <ul>
-                    <li>Musician</li>
-                    <li>Bike Traveller</li>
-                    <li>Cat Person</li>
+                    {this.state.hobbies.map(hobbie=>
+                    
+                        <li key={hobbie}>{hobbie}</li>
+                    )}
                 </ul>
             </section>
         </div>

@@ -21,5 +21,7 @@ namespace BusinessCard.People.Records
         public string Specialization { get; set; }
         
         public virtual PersonImage Image { get; set; }
+        public virtual ICollection<EducationStep> EducationSteps { get; set; }
+        public virtual ICollection<Hobby> Hobbies { get; set; }
     }
 }

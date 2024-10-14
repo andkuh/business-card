@@ -15,12 +15,6 @@ namespace BusinessCard
     {
         public static void Seed(Ctx context)
         {
-            //int dutiesCounter = 0;
-            //int employmentsCount = 0;
-            //int assignmentsCount = 0;
-            //int jobTitleCounter = 0;
-            //int technologyCount = 0;
-
             context.Database.EnsureDeleted();
             context.Database.EnsureCreated();
 
@@ -35,7 +29,6 @@ namespace BusinessCard
                 FirstName = "Andrei",
                 LastName = "Kuharchuk",
                 YearsOld = (int) (DateTime.UtcNow - new DateTime(1988, 07, 21)).TotalDays / 365,
-                //Id = 1,
                 Location = "Brest, Belarus",
                 Specialization = ".Net Developer",
                 Image = new PersonImage
@@ -50,18 +43,15 @@ namespace BusinessCard
 
             var godel = new Employer()
             {
-                //Id = 1,
                 Name = "Godel Technologies Europe, BY"
             };
             var eComm = new Employer()
             {
-                //Id = 2,
                 Name = "E-commerce Product Company, BY"
             };
 
             var sabbatical = new Employer()
             {
-                //Id = 3,
                 Name = "Career break (Sabbatical)"
             };
 
@@ -77,7 +67,6 @@ namespace BusinessCard
 
             JobTitle baPm = new()
             {
-                //Id = ++jobTitleCounter,
                 Name = "BA / PM",
                 StartDate = new DateTime(2017, 5, 1),
                 EndDate = new DateTime(2018, 4, 1)
@@ -85,14 +74,12 @@ namespace BusinessCard
 
             JobTitle dev = new()
             {
-                //Id = ++jobTitleCounter,
                 Name = "Software Developer",
                 StartDate = new DateTime(2018, 4, 13),
                 EndDate = new DateTime(2021, 11, 1)
             };
             JobTitle seniorDev = new()
             {
-                //Id = ++jobTitleCounter,
                 Name = "Senior Software Developer",
                 StartDate = new DateTime(2021, 11, 1),
                 EndDate = new DateTime(2023, 4, 12)
@@ -104,17 +91,14 @@ namespace BusinessCard
 
             Technology html = new()
             {
-                //Id = ++technologyCount,
                 Title = "HTML"
             };
             Technology css = new()
             {
-                //Id = ++technologyCount,
                 Title = "CSS"
             };
             Assignment baAssignment = new()
             {
-                //Id = ++assignmentsCount,
                 Name = "BA / PM support of development",
                 Role = "Business analyst / Project manager",
                 StartDate = new DateTime(2017, 5, 1),
@@ -126,27 +110,22 @@ namespace BusinessCard
                 {
                     new()
                     {
-                        //Id = ++dutiesCounter,
                         Description = "Business needs analysis"
                     },
                     new()
                     {
-                        //Id = ++dutiesCounter,
                         Description = "Feature management"
                     },
                     new()
                     {
-                        //Id = ++dutiesCounter,
                         Description = "Technical discussions participation"
                     },
                     new()
                     {
-                        //Id = ++dutiesCounter,
                         Description = "UI/UX"
                     },
                     new()
                     {
-                        //Id = ++dutiesCounter,
                         Description = "Manual quality assurance"
                     }
                 },
@@ -160,42 +139,34 @@ namespace BusinessCard
 
             Technology cSharp = new()
             {
-                //Id = ++technologyCount, 
                 Title = "C#"
             };
             Technology typeScript = new()
             {
-                //Id = ++technologyCount,
                 Title = "Typescript"
             };
             Technology javaScript = new()
             {
-                //Id = ++technologyCount,
                 Title = "Javascript"
             };
             Technology efCore = new()
             {
-                //Id = ++technologyCount,
                 Title = "Entity Framework Core"
             };
             Technology vbNet = new()
             {
-                //Id = ++technologyCount, 
                 Title = "VB.NET"
             };
             Technology rabbitMq = new()
             {
-                //Id = ++technologyCount, 
                 Title = "Rabbit MQ"
             };
             Technology aspNetCore = new()
             {
-                //Id = ++technologyCount, 
                 Title = "ASP.NET Core"
             };
             Technology msSqlServer = new()
             {
-                //Id = ++technologyCount,
                 Title = "MS SQL Server"
             };
             Technology dotnetFramework = new Technology()
@@ -204,12 +175,10 @@ namespace BusinessCard
             };
             Technology angular = new()
             {
-                //Id = ++technologyCount,
                 Title = "Angular"
             };
             Technology mySql = new()
             {
-                //Id = ++technologyCount,
                 Title = "MySql"
             };
 
@@ -218,7 +187,6 @@ namespace BusinessCard
             {
                 new()
                 {
-                    //Id = ++employmentsCount,
                     StartDate = new DateTime(2023, 4, 13),
                     Employer = sabbatical,
                     Assignments = new List<Assignment>()
@@ -232,7 +200,6 @@ namespace BusinessCard
                                 "Nuget package providing alternative, fast and easy approach to develop web api",
                             Summary = "Router library",
                             Role = "Developer",
-                            //Id = ++assignmentsCount,
                             Technologies = new List<Technology>()
                             {
                                 cSharp, efCore, rabbitMq, msSqlServer, typeScript, angular
@@ -241,12 +208,10 @@ namespace BusinessCard
                             {
                                 new()
                                 {
-                                    // Id = ++dutiesCounter,
                                     Description = "Features Design and Development",
                                 },
                                 new()
                                 {
-                                    // Id = ++dutiesCounter,
                                     Description = "Unit testing",
                                 },
                             }
@@ -258,7 +223,6 @@ namespace BusinessCard
                         {
                             Name = "Software Developer. Still :)",
                             StartDate = new DateTime(2023, 4, 13),
-                            //Id = ++jobTitleCounter, 
                             EndDate = DateTime.Today
                         }
                     }
@@ -266,9 +230,7 @@ namespace BusinessCard
                 new()
                 {
                     Employer = godel,
-                    //Id = ++employmentsCount,
                     StartDate = new DateTime(2018, 4, 13),
-                    //PersonId = 1,
                     Person = person,
                     EndDate = new DateTime(2023, 4, 12),
                     JobTitles = new List<JobTitle>()
@@ -281,7 +243,6 @@ namespace BusinessCard
                         new()
                         {
                             Name = "E-Commerce app",
-                            // Id = ++assignmentsCount,
                             Role = "Developer",
                             StartDate = new DateTime(2018, 06, 01),
                             EndDate = new DateTime(2018, 09, 01),
@@ -294,17 +255,14 @@ namespace BusinessCard
                             {
                                 new()
                                 {
-                                    //Id = ++dutiesCounter,
                                     Description = "Features Design and Development"
                                 },
                                 new()
                                 {
-                                    //Id = ++dutiesCounter,
                                     Description = "Unit-tests and bug fixes"
                                 },
                                 new()
                                 {
-                                    //Id = ++dutiesCounter,
                                     Description = "Third party service integration"
                                 }
                             },
@@ -325,7 +283,6 @@ namespace BusinessCard
                         new()
                         {
                             Name = "Godel's internal project",
-                            //Id = ++assignmentsCount,
                             Role = "Developer",
                             StartDate = new DateTime(2018, 09, 01),
                             EndDate = new DateTime(2018, 11, 01),
@@ -335,12 +292,10 @@ namespace BusinessCard
                             {
                                 new()
                                 {
-                                    // Id = ++dutiesCounter,
                                     Description = "Features Design and Development",
                                 },
                                 new()
                                 {
-                                    //Id = ++dutiesCounter,
                                     Description = "Unit-tests and bug fixes"
                                 },
                             },
@@ -359,7 +314,6 @@ namespace BusinessCard
                         },
                         new()
                         {
-                            //Id = ++assignmentsCount,
                             Name = "Financial advisers system",
                             Description = "Technology solution for financial advisors and financial services firms",
                             Summary = "Migration of micro services from .NET Framework to .NET Core",
@@ -369,12 +323,10 @@ namespace BusinessCard
                             {
                                 new()
                                 {
-                                    //Id = ++dutiesCounter,
                                     Description = "Migration of microservices from .NET Framework 4.7 to .NET Core",
                                 },
                                 new()
                                 {
-                                    // Id = ++dutiesCounter,
                                     Description = "Unit-tests and bug fixes"
                                 }
                             },
@@ -385,7 +337,6 @@ namespace BusinessCard
                         },
                         new()
                         {
-                            //Id = ++assignmentsCount,
                             Name = "Printing production costs calculation application",
                             StartDate = new DateTime(2019, 5, 1),
                             Summary = "Application system built using .NET Core, EF Core, Rabbit MQ, etc",
@@ -397,22 +348,18 @@ namespace BusinessCard
                             {
                                 new()
                                 {
-                                    // Id = ++dutiesCounter,
                                     Description = "Features Design and Development",
                                 },
                                 new()
                                 {
-                                    //Id = ++dutiesCounter,
                                     Description = "Code reviews",
                                 },
                                 new()
                                 {
-                                    //Id = ++dutiesCounter,
                                     Description = "Unit-tests and bug fixes"
                                 },
                                 new()
                                 {
-                                    //Id = ++dutiesCounter,
                                     Description = "Third party service integration"
                                 }
                             },
@@ -430,7 +377,6 @@ namespace BusinessCard
                 },
                 new()
                 {
-                    // Id = ++employmentsCount,
                     PersonId = 1,
                     Employer = eComm,
                     StartDate = new DateTime(2017, 5, 1),
@@ -447,8 +393,6 @@ namespace BusinessCard
                 },
                 new()
                 {
-                    // Id = ++employmentsCount,
-                    //PersonId = 1,
                     Person = person,
                     Employer = new Employer() {Name = "Self-Education"},
                     StartDate = new DateTime(2016, 4, 1),
@@ -457,7 +401,6 @@ namespace BusinessCard
                         new()
                         {
                             Name = "Lead .NET Self-Educator :)",
-                            //Id = ++jobTitleCounter,
                             StartDate = new DateTime(2016, 4, 1),
                             EndDate = new DateTime(2018, 4, 1)
                         },
@@ -466,7 +409,6 @@ namespace BusinessCard
                     {
                         new()
                         {
-                            //Id = ++assignmentsCount,
                             StartDate = new DateTime(2016, 4, 1),
                             EndDate = new DateTime(2018, 4, 1),
                             Name = "Learning ASP.NET C# Coding",
@@ -484,17 +426,14 @@ namespace BusinessCard
                             {
                                 new()
                                 {
-                                    //Id = ++dutiesCounter, 
                                     Description = "Learning"
                                 },
                                 new()
                                 {
-                                    //Id = ++dutiesCounter, 
                                     Description = "Learning"
                                 },
                                 new()
                                 {
-                                    //Id = ++dutiesCounter, 
                                     Description = "Learning once again"
                                 }
                             }
@@ -503,24 +442,20 @@ namespace BusinessCard
                 },
                 new()
                 {
-                    //Id = ++employmentsCount, 
                     Employer = logistics,
                     StartDate = new DateTime(2013, 4, 1),
                     EndDate = new DateTime(2016, 4, 1),
                     Person = person,
-                    //PersonId = 1,
                     JobTitles = new List<JobTitle>()
                     {
                         new()
                         {
-                            //Id = ++jobTitleCounter,
                             Name = "Software Developer",
                             EndDate = new DateTime(2016, 4, 1),
                             StartDate = new DateTime(2014, 8, 1)
                         },
                         new()
                         {
-                            //Id = ++jobTitleCounter,
                             Name = "Economist",
                             EndDate = new DateTime(2014, 8, 1),
                             StartDate = new DateTime(2013, 4, 1)
@@ -535,7 +470,6 @@ namespace BusinessCard
                             Name = "Financial department workflow application",
                             Summary = "Application to simplify financial workflow",
                             Description = "Application system for financial department document workflow",
-                            //Id = ++assignmentsCount,
                             Role = "Developer",
                             Technologies =
                                 new List<Technology>()
@@ -543,7 +477,6 @@ namespace BusinessCard
                                     cSharp, msSqlServer,
                                     new()
                                     {
-                                        //Id = ++technologyCount,
                                         Title = "Windows Forms"
                                     }
                                 }
@@ -556,24 +489,20 @@ namespace BusinessCard
                             Summary = "Application to simplify invoicing",
                             Description =
                                 "Visual Basic for Applications driven Excel files to manage invoicing process",
-                            //Id = ++assignmentsCount,
                             Role = "Economist / Developer",
                             Technologies =
                                 new List<Technology>
                                 {
                                     new()
                                     {
-                                        //Id = ++technologyCount,
                                         Title = "MS ACCESS"
                                     },
                                     new()
                                     {
-                                        //Id = ++technologyCount,
                                         Title = "VBA"
                                     },
                                     new()
                                     {
-                                        //Id = ++technologyCount,
                                         Title = "MS Excel"
                                     }
                                 }
@@ -590,6 +519,37 @@ namespace BusinessCard
             Technology xamarin = new Technology()
             {
                 Title = "Xamarin (personal usage only)"
+            };
+
+
+
+
+            person.EducationSteps = new List<EducationStep>()
+            {
+                new EducationStep()
+                {
+                    Institution = "BSTU", 
+                    Name = "Bachelor's Degree in Finance",
+                    Location = "Brest, BY", 
+                    YearStarted = 2005, 
+                    YearFinished = 2010
+                }
+            };
+
+            person.Hobbies = new List<Hobby>()
+            {
+                new Hobby()
+                {
+                    Title = "Musician",
+                },
+                new Hobby()
+                {
+                    Title = "Bike Traveller",
+                },
+                new Hobby()
+                {
+                    Title = "Cat Person",
+                },
             };
 
 
