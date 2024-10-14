@@ -1,4 +1,4 @@
-namespace BusinessCard
+namespace BusinessCard.People.Records
 {
     public class Hobby
     {
