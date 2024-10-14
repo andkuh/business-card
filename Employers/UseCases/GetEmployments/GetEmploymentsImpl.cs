@@ -71,7 +71,8 @@ namespace BusinessCard.Employers.UseCases.GetEmployments
                                     EndDate = a.EndDate > jobTitle.EndDate ? jobTitle.EndDate : a.EndDate,
                                     Summary = a.Summary,
                                     Technologies = a.Technologies.OrderBy(o => o.Title).Select(t => t.Title),
-                                    Duties = a.Duties.OrderBy(o => o.Description).Select(d => d.Description)
+                                    Duties = a.Duties.OrderBy(o => o.Description).Select(d => d.Description),
+                                    Url = a.Url
                                 })
                         })
                 })

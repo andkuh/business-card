@@ -28,6 +28,7 @@ namespace BusinessCard.Employers.Endpoints
                             .Select(a => new EmploymentDto.AssignmentDto()
                             {
                                 Description = a.Description,
+                                Url = a.Url,
                                 Id = a.Id,
                                 Name = a.Name,
                                 StartDate = a.StartDate < jobTitle.StartDate ? jobTitle.StartDate : a.StartDate,

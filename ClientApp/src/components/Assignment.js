@@ -21,6 +21,8 @@ const Assignment = ({assignment}) => {
                 <span>{tech}</span>
             ])}
         </div>
+
+        {assignment.url && <div><a href={assignment.url} target="_blank">See Details</a></div>}
     </div>
 }
 

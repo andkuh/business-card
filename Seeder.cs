@@ -197,7 +197,8 @@ namespace BusinessCard
                             Name = "'DotExpress' Library (Pet Project)",
                             EndDate = DateTime.Today,
                             Description =
-                                "Nuget package providing alternative, fast and easy approach to develop web api",
+                                "Nuget package providing alternative, fast and easy approach to develop web api. This application uses a little piece of this lib, see the link below the source code",
+                            Url = "https://github.com/andkuh/business-card",
                             Summary = "Router library",
                             Role = "Developer",
                             Technologies = new List<Technology>()
