@@ -38,9 +38,9 @@ export class CV extends Component {
     render() {
         return <div>
             <header className="section-header">
-                <div>
+                <div className="personal">
                     {this.state.person.id &&
-                    <div>
+                    <div >
                         <h1>{this.state.person.firstName} {this.state.person.lastName}</h1>
                         <p>{this.state.person.specialization}, {this.state.person.yearsOld} y.o.</p>
                         <p>{this.state.person.location}</p>
@@ -77,11 +77,33 @@ export class CV extends Component {
                                 <div>
                                     <span
                                         className="job-title">{c.title}</span>, {formatDateToMonthAndYear(c.startDate)}
+                                    <div className="projects">
+                                        Projects:
+                                    </div>
                                     <ul>
                                         {c.assignments.map(a =>
                                             <li key={a.name}>
                                                 {a.name} ({formatDateToMonthAndYear(a.startDate)} - {formatDateToMonthAndYear(a.endDate)})
-                                                <p className="assignment-summary">{a.description}</p>
+                                                <div className="assignment-summary">
+                                                    {a.description}
+                                                </div>
+                                                <div className="duties">
+                                                    
+                                                    {a.duties.map((duty) => [
+                                                        <span>   {duty} <br/></span>
+                                                    ])}
+                                                </div>
+                                                
+                                                <div className="assignment-summary">
+                                                    Tech:&nbsp;
+                                                    {a.technologies.map((tech, i) => [
+                                                        i > 0 && ", ",
+                                                        <span>{tech}</span>
+                                                    ])}
+                                                </div>
+
+
+                                                
                                             </li>
                                         )}
                                     </ul>
@@ -115,6 +137,7 @@ export class CV extends Component {
                 <h2>Personal</h2>
                 <ul>
                     <li>Musician</li>
+                    <li>Bike Traveller</li>
                     <li>Cat Person</li>
                 </ul>
             </section>

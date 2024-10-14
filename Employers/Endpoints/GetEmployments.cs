@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using BusinessCard.Employments.Records;
 using BusinessCard.Infrastructure;
@@ -31,6 +32,8 @@ namespace BusinessCard.Employers.Endpoints
                 .Include(s => s.JobTitles)
                 .Include(s => s.Assignments)
                 .ThenInclude(s => s.Technologies)
+                .Include(s => s.Assignments)
+                .ThenInclude(s => s.Duties)
                 .OrderByDescending(s => s.EndDate)
                 .Where(s => s.PersonId == id)
                 .AsNoTracking();
@@ -74,12 +77,13 @@ namespace BusinessCard.Employers.Endpoints
                                     StartDate = a.StartDate < jobTitle.StartDate ? jobTitle.StartDate : a.StartDate,
                                     EndDate = a.EndDate > jobTitle.EndDate ? jobTitle.EndDate : a.EndDate,
                                     Summary = a.Summary,
-                                    Technologies = a.Technologies.Select(t => t.Title)
+                                    Technologies = a.Technologies.OrderBy(o => o.Title).Select(t => t.Title),
+                                    Duties = a.Duties.OrderBy(o => o.Description).Select(d => d.Description)
                                 })
                         })
                 })
                 .ToListAsync();
-
+            
             return Ok(new {items = employments});
         }
     }
@@ -115,6 +119,7 @@ namespace BusinessCard.Employers.Endpoints
             public DateTime EndDate { get; set; }
             public string Summary { get; set; }
             public IEnumerable<string> Technologies { get; set; }
+            public IEnumerable<string> Duties { get; set; }
         }
     }
 }

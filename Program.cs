@@ -4,6 +4,7 @@ using BusinessCard.People.Endpoints;
 using BusinessCard.People.Records;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json.Serialization;
@@ -31,7 +32,11 @@ builder.Services.AddApiExpress(s =>
         .AddData<Data>
         (
             data =>
-                data.UseDbContext<Ctx>(context => context.UseInMemoryDatabase("Context"))
+                data.UseDbContext<Ctx>(context =>
+                {
+                    //context.UseSqlServer(builder.Configuration.GetConnectionString("BusinessCard"));
+                    context.UseInMemoryDatabase("BusinessCard");
+                })
         );
 });
 

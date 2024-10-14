@@ -22,5 +22,7 @@ namespace BusinessCard.Employments.Records
         public string Description { get; set; }
         public string Summary { get; set; }
         public virtual ICollection<Technology> Technologies { get; set; } = new List<Technology>();
+        
+        
     }
 }
