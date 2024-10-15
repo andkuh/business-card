@@ -198,7 +198,12 @@ namespace BusinessCard
                             EndDate = DateTime.Today,
                             Description =
                                 "Nuget package providing alternative, fast and easy approach to develop web api. This application uses a little piece of this lib, see the link below the source code",
-                            Url = "https://github.com/andkuh/business-card",
+
+                            Link = new Link()
+                            {
+                                Address = "https://github.com/andkuh/business-card",
+                                Caption = "This page is implemented using that package along with classic controllers, see details",
+                            },
                             Summary = "Router library",
                             Role = "Developer",
                             Technologies = new List<Technology>()

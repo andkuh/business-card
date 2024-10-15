@@ -22,7 +22,7 @@ const Assignment = ({assignment}) => {
             ])}
         </div>
 
-        {assignment.url && <div><a href={assignment.url} target="_blank">See Details</a></div>}
+        {assignment.link && <div><a href={assignment.link.address} target="_blank"> {assignment.link.caption || <span>See Details</span>}</a></div>}
     </div>
 }
 

@@ -21,7 +21,9 @@ namespace BusinessCard.Technologies.Endpoints
         public async Task<IActionResult> Get()
         {
             var technologies =
-                await _context.Technologies.OrderBy(s => s.Title).Select(s => new {s.Title}).ToListAsync();
+                await _context.Technologies
+                    .OrderBy(s => s.Title).Select(s => new {s.Title})
+                    .ToListAsync();
 
             return Ok(new {items = technologies});
         }

@@ -1,6 +1,7 @@
 using BusinessCard;
-using BusinessCard.Employers.Endpoints;
-using BusinessCard.Employers.UseCases.GetEmployments;
+using BusinessCard.Employments.Endpoints;
+using BusinessCard.Employments.Services;
+using BusinessCard.Employments.UseCases.GetEmployments;
 using BusinessCard.Infrastructure;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
@@ -21,7 +22,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddControllers();
 builder.Services.AddSingleton<IModelToDtoMapper, ModelToDtoMapper>();
-builder.Services.AddScoped<IGetEmployments, GetEmployments>();
+builder.Services.AddScoped<IGetEmploymentsQueryHandler, GetEmploymentsQueryHandler>();
+builder.Services.AddScoped<IGetEmployments, IGetEmployments.Impl>();
 
 //builder.Services.AddDbContext<Ctx>(s => s.UseInMemoryDatabase("Context"));
 

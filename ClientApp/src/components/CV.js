@@ -24,14 +24,14 @@ export class CV extends Component {
                 this.setState({person: data});
             });
 
-        fetch("/api/people/" + this.personId + "/employments")
+        fetch("/api/v2/people/" + this.personId + "/employments")
             .then(async resp => {
                 const data = await resp.json();
 
                 this.setState({employments: data.items});
             });
 
-        fetch("/api/technologies")
+        fetch("/api/v2/technologies")
             .then(async resp => {
                 const data = await resp.json();
 
