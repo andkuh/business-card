@@ -12,18 +12,23 @@ namespace BusinessCard.People.Endpoints.v2
         public void Define(IEndpointBuilder<GetPerson> configure)
         {
             configure.Get("/api/v2/people/{id}")
-                
                 .As(s => s.FromUri<int>())
                 .UseData()
                 .SetOf<Person>()
                 .Single(item => item.Having(id => person => person.Id == id))
-                .MapResult(s => new PersonDto(s.Id, s.Location, s.FirstName, s.LastName, s.YearsOld)
+                .MapResult(person => new
                 {
-                    Summary = s.Summary,
-                    Specialization = s.Specialization,
-                    Image = new PersonDto.ImageDto()
+                    person.Id, 
+                    person.Location, 
+                    person.FirstName, 
+                    person.LastName, 
+                    person.YearsOld,
+                    person.Summary,
+                    person.Specialization,
+                    image = new
                     {
-                        Bytes = s.Image.Bytes, ContentType = s.Image.ContentType
+                        person.Image.Bytes, 
+                        person.Image.ContentType
                     }
                 })
                 .Respond200Ok();

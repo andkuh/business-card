@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace BusinessCard.Employers.Endpoints
+namespace BusinessCard.Employments.Endpoints
 {
     public class EmploymentDto
     {
@@ -36,7 +36,13 @@ namespace BusinessCard.Employers.Endpoints
             public string Summary { get; set; }
             public IEnumerable<string> Technologies { get; set; }
             public IEnumerable<string> Duties { get; set; }
-            public string? Url { get; set; }
+            public LinkDto? Link { get; set; }
+        }
+
+        public class LinkDto
+        {
+            public string Address { get; set; }
+            public string Caption { get; set; }
         }
     }
 }

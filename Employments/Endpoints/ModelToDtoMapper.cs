@@ -1,8 +1,8 @@
 ﻿using System.Linq;
-using BusinessCard.Employers.UseCases;
-using BusinessCard.Employers.UseCases.GetEmployments;
+using BusinessCard.Employments.Services;
+using BusinessCard.Employments.UseCases.GetEmployments;
 
-namespace BusinessCard.Employers.Endpoints
+namespace BusinessCard.Employments.Endpoints
 {
     public class ModelToDtoMapper : IModelToDtoMapper
     {
@@ -28,7 +28,9 @@ namespace BusinessCard.Employers.Endpoints
                             .Select(a => new EmploymentDto.AssignmentDto()
                             {
                                 Description = a.Description,
-                                Url = a.Url,
+                                Link = a.Link != null
+                                    ? new EmploymentDto.LinkDto {Address = a.Link.Address, Caption = a.Link.Caption}
+                                    : null,
                                 Id = a.Id,
                                 Name = a.Name,
                                 StartDate = a.StartDate < jobTitle.StartDate ? jobTitle.StartDate : a.StartDate,

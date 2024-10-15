@@ -21,6 +21,8 @@ namespace BusinessCard.Infrastructure.Configurations.Employments
             builder.Property(s => s.Description).HasMaxLength(2048);
 
             builder.Property(s => s.Summary).HasMaxLength(1024);
+
+            builder.OwnsOne(s => s.Link);
         }
     }
 }
