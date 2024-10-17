@@ -1,10 +1,6 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using BusinessCard.Employments.Records;
 using BusinessCard.Employments.Services;
-using BusinessCard.Infrastructure;
-using Microsoft.EntityFrameworkCore;
 
 namespace BusinessCard.Employments.UseCases.GetEmployments
 {

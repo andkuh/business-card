@@ -14,6 +14,8 @@ using Router.Configuration.Formatting;
 using Router.Data.EntityFramework;
 using Router.Data.Extension;
 using Router.DependencyInjection.BuiltIn;
+using Router.ErrorHandling;
+using Router.ErrorHandling.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,13 +32,11 @@ builder.Services.AddScoped<IGetEmployments, IGetEmployments.Impl>();
 builder.Services.AddApiExpress(s =>
 {
     s.AddEndpoints(a => a.UseJson<CamelCasePropertyNamesContractResolver>())
+        .AddErrorHandling(err => err.Add<ErrorResponse, Errors>())
         .AddData<Data>
         (
             data =>
-                data.UseDbContext<Ctx>(context =>
-                {
-                    context.UseInMemoryDatabase("BusinessCard");
-                })
+                data.UseDbContext<Ctx>(context => { context.UseInMemoryDatabase("BusinessCard"); })
         );
 });
 

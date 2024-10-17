@@ -3,9 +3,11 @@ using BusinessCard.People.Records;
 using Microsoft.EntityFrameworkCore;
 using Router;
 using Router.Data;
+using Router.Data.Configuration.Extensions;
 using Router.Data.Extensions;
 using Router.Request;
 using Router.Response.Extensions;
+using Router.Validation.Numbers;
 
 namespace BusinessCard.People.Endpoints.v2
 {
@@ -14,13 +16,17 @@ namespace BusinessCard.People.Endpoints.v2
         public void Define(IEndpointBuilder<GetPersonHobbies> configure)
         {
             configure.Get("/api/v2/people/{id}/hobbies")
-                .As(s => s.FromUri<int>())
+                .As(data => data.FromUri<int>(a => a.IsAboveZero()))
                 .UseData()
                 .SetOf<Person>()
-                .Select((s, req) => s.Include(a => a.Hobbies).SingleOrDefaultAsync(a => a.Id == req))
+                .Select
+                (
+                    selection: (people, id) => people.Include(a => a.Hobbies).SingleOrDefaultAsync(a => a.Id == id),
+                    configure: options => options.ThrowNotFoundIfNothing()
+                )
                 .MapResult(s => new
                 {
-                    items = Enumerable.Select<Hobby, string>(s.Hobbies, e => e.Title)
+                    items = s.Hobbies.Select(hobby => hobby.Title)
                 })
                 .Respond200Ok();
         }
