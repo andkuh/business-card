@@ -6,15 +6,15 @@ import Person from "./Person";
 export class CV extends Component {
 
     personId;
-    
+
     constructor(props) {
         super(props);
 
         this.personId = 1; // Oh-oh, naughty magic numbers to get Andrei from backend :)
-        
-        this.state = {person: {}, employments: [], technologies: [], hobbies: [], education:[]};
+
+        this.state = {person: null, employments: null, technologies: null, hobbies: null, education: null};
     }
-    
+
     componentDidMount() {
         fetch("/api/v2/people/" + this.personId)
             .then(async s => {
@@ -37,7 +37,7 @@ export class CV extends Component {
 
                 this.setState({technologies: data.items})
             });
-        
+
         fetch("/api/v2/people/" + this.personId + "/education")
             .then(async resp => {
                 const data = await resp.json();
@@ -51,51 +51,56 @@ export class CV extends Component {
             })
     }
 
+    loading() {
+        return <span>Loading..</span>
+    }
+
     render() {
         return <div>
             <header className="section-header">
-                {this.state && <Person person={this.state.person}/>} 
+                {this.state.person ? <Person person={this.state.person}/> : this.loading()}
             </header>
 
             <section className="section">
                 <h2>Professional Summary</h2>
-                <p>{this.state.person.summary}</p>
+                {this.state.person ? <p>{this.state.person.summary}</p> : this.loading()}
             </section>
 
             <section className="section">
                 <h2>Experience</h2>
                 <div>
-                    {this.state.employments.map(e =>
+                    {this.state.employments ? this.state.employments.map(e =>
                         <Employment employment={e}/>
-                    )}
+                    ) : this.loading()}
                 </div>
             </section>
-            
+
             <section className="section">
                 <h2 id="technologies">Skills / Technologies</h2>
                 <ul>
-                    {this.state.technologies.map(s =>
+                    {this.state.technologies ? this.state.technologies.map(s =>
                         <li key={s.title}>
                             {s.title}
                         </li>
-                    )}
+                    ) : this.loading()}
                 </ul>
             </section>
 
             <section className="section">
                 <h2>Education</h2>
-                {this.state.education.map(education=> 
-                
+                {this.state.education ? this.state.education.map(education =>
+
                     <p>{education.name} - {education.inititution} ({education.yearStarted} - {education.yearFinished})</p>
-                )}
-                
+                ) : this.loading()}
+
+
             </section>
 
             <section className="section">
                 <h2>Personal</h2>
                 <ul>
-                    {this.state.hobbies.map(hobbie=>
-                    
+                    {this.state.hobbies && this.state.hobbies.map(hobbie =>
+
                         <li key={hobbie}>{hobbie}</li>
                     )}
                 </ul>
