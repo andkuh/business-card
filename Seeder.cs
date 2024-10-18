@@ -13,26 +13,51 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BusinessCard
 {
-    public static class Seeder
+    public class Seeder
     {
-        public static async Task SeedAsync(Ctx context)
+        public static Task SeedAsync(Ctx context)
         {
-            await context.Database.EnsureDeletedAsync();
-            await context.Database.MigrateAsync();
+            return new Seeder(context).SeedAsync();
+        }
 
-            var person = new Person()
+        private readonly Ctx _context;
+
+        private Seeder(Ctx context)
+        {
+            _context = context;
+        }
+
+        private async Task SeedAsync()
+        {
+            await _context.Database.MigrateAsync();
+
+            const string? name = "Andrei";
+            const string? lastName = "Kukharchuk";
+
+            var existingPerson = await _context
+                .People
+                .FirstOrDefaultAsync(s => s.FirstName.Equals(name) && s.LastName.Equals(lastName));
+
+            var person = existingPerson ?? new Person() {Image = new PersonImage()};
+
+            if (existingPerson is null)
             {
-                Image = new PersonImage()
-            };
+                _context.People.Add(person);
+            }
 
             var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("BusinessCard.Assets.image.png");
 
-            byte[] buffer = new byte[stream.Length];
+            if (stream == null)
+            {
+                throw new Exception("Image is not reachable");
+            }
+
+            var buffer = new byte[stream.Length];
 
             await stream.ReadAsync(buffer);
 
-            person.FirstName = "Andrei";
-            person.LastName = "Kuharchuk";
+            person.FirstName = name;
+            person.LastName = lastName;
             person.YearsOld = (int) (DateTime.UtcNow - new DateTime(1988, 07, 21)).TotalDays / 365;
             person.Location = "Brest, Belarus";
             person.Specialization = ".Net Developer";
@@ -43,62 +68,74 @@ namespace BusinessCard
                 "Seasoned .NET Developer with up to 10 years of hands-on experience adept at navigating both backend and front end development landscapes." +
                 " Proficient in leveraging .NET technologies to deliver robust solutions effectively.";
 
-            var godel = new Employer()
-            {
-                Name = "Godel Technologies Europe, BY"
-            };
-            var eComm = new Employer()
-            {
-                Name = "E-commerce Product Company, BY"
-            };
+            var godel = await EnsureEmployerCreated("Godel Technologies Europe, BY");
 
-            var sabbatical = new Employer()
-            {
-                Name = "Career break (Sabbatical)"
-            };
+            var eComm = await EnsureEmployerCreated("E-commerce Product Company, BY");
 
-            var logistics = new Employer()
-            {
-                Name = "Logistics Company, BY", //Id = 5
-            };
+            var sabbatical = await EnsureEmployerCreated("Career break (Sabbatical)");
 
-            context.Employers.Add(godel);
-            context.Employers.Add(eComm);
-            context.Employers.Add(sabbatical);
-            context.Employers.Add(logistics);
+            var logistics = await EnsureEmployerCreated("Logistics Company, BY");
 
-            JobTitle baPm = new()
+            var baPm = await EnsureJobTitleCreated("BA / PM", t =>
             {
-                Name = "BA / PM",
-                StartDate = new DateTime(2017, 5, 1),
-                EndDate = new DateTime(2018, 4, 1)
-            };
+                t.StartDate = new DateTime(2017, 5, 1);
+                t.EndDate = new DateTime(2018, 4, 1);
+            });
 
-            JobTitle dev = new()
+            var dev = await EnsureJobTitleCreated("Software Developer", t =>
             {
-                Name = "Software Developer",
-                StartDate = new DateTime(2018, 4, 13),
-                EndDate = new DateTime(2021, 11, 1)
-            };
-            JobTitle seniorDev = new()
-            {
-                Name = "Senior Software Developer",
-                StartDate = new DateTime(2021, 11, 1),
-                EndDate = new DateTime(2023, 4, 12)
-            };
+                t.StartDate = new DateTime(2018, 4, 13);
+                t.EndDate = new DateTime(2021, 11, 1);
+            });
 
-            context.JobTitles.Add(baPm);
-            context.JobTitles.Add(dev);
-            context.JobTitles.Add(seniorDev);
+            var seniorDev = await EnsureJobTitleCreated("Software Developer", t =>
+            {
+                t.StartDate = new DateTime(2021, 11, 1);
+                t.EndDate = new DateTime(2023, 4, 12);
+            });
 
-            Technology html = new()
-            {
-                Title = "HTML"
-            };
-            Technology css = new()
-            {
-                Title = "CSS"
-            };
+            var html = await EnsureTechnologyCreated("HTML");
+
+            var css = await EnsureTechnologyCreated("CSS");
+
+            var kendoUi = await EnsureTechnologyCreated("Kendo UI");
+
+            var cSharp = await EnsureTechnologyCreated("C#");
+
+            var typeScript = await EnsureTechnologyCreated("Typescript");
+
+            var javaScript = await EnsureTechnologyCreated("Javascript");
+
+            var efCore = await EnsureTechnologyCreated("Entity Framework Core");
+
+            var vbNet = await EnsureTechnologyCreated("VB.NET");
+
+            var rabbitMq = await EnsureTechnologyCreated("Rabbit MQ");
+
+            var aspNetCore = await EnsureTechnologyCreated("ASP.NET Core");
+
+            var msSqlServer = await EnsureTechnologyCreated("MS SQL Server");
+
+            var dotnetFramework = await EnsureTechnologyCreated(".NET Framework 4.8");
+
+            var angular = await EnsureTechnologyCreated("Angular");
+
+            var mySql = await EnsureTechnologyCreated("MySql");
+
+            await EnsureTechnologyCreated("WPF (personal usage only)");
+
+            await EnsureTechnologyCreated("Xamarin (personal usage only)");
+
+            await EnsureTechnologyCreated("Blazor (personal usage only)");
+
+            var msExcel = await EnsureTechnologyCreated("MS Excel");
+
+            var vba = await EnsureTechnologyCreated("VBA");
+
+            var msAccess = await EnsureTechnologyCreated("MS ACCESS");
+
+            var winForms = await EnsureTechnologyCreated("Windows Forms");
+
             Assignment baAssignment = new()
             {
                 Name = "BA / PM support of development",
@@ -136,54 +173,6 @@ namespace BusinessCard
                     html, css,
                 }
             };
-
-            context.Assignments.Add(baAssignment);
-
-            Technology cSharp = new()
-            {
-                Title = "C#"
-            };
-            Technology typeScript = new()
-            {
-                Title = "Typescript"
-            };
-            Technology javaScript = new()
-            {
-                Title = "Javascript"
-            };
-            Technology efCore = new()
-            {
-                Title = "Entity Framework Core"
-            };
-            Technology vbNet = new()
-            {
-                Title = "VB.NET"
-            };
-            Technology rabbitMq = new()
-            {
-                Title = "Rabbit MQ"
-            };
-            Technology aspNetCore = new()
-            {
-                Title = "ASP.NET Core"
-            };
-            Technology msSqlServer = new()
-            {
-                Title = "MS SQL Server"
-            };
-            Technology dotnetFramework = new Technology()
-            {
-                Title = ".NET Framework 4.8"
-            };
-            Technology angular = new()
-            {
-                Title = "Angular"
-            };
-            Technology mySql = new()
-            {
-                Title = "MySql"
-            };
-
 
             person.Employments = new List<Employment>()
             {
@@ -378,8 +367,11 @@ namespace BusinessCard
                                 aspNetCore,
                                 html,
                                 css,
-                                rabbitMq, efCore, msSqlServer, typeScript,
-                                new Technology() {Title = "Kendo UI"}
+                                rabbitMq,
+                                efCore,
+                                msSqlServer,
+                                typeScript,
+                                kendoUi
                             }
                         }
                     }
@@ -484,10 +476,7 @@ namespace BusinessCard
                                 new List<Technology>()
                                 {
                                     cSharp, msSqlServer,
-                                    new()
-                                    {
-                                        Title = "Windows Forms"
-                                    }
+                                    winForms
                                 }
                         },
                         new()
@@ -502,38 +491,19 @@ namespace BusinessCard
                             Technologies =
                                 new List<Technology>
                                 {
-                                    new()
-                                    {
-                                        Title = "MS ACCESS"
-                                    },
-                                    new()
-                                    {
-                                        Title = "VBA"
-                                    },
-                                    new()
-                                    {
-                                        Title = "MS Excel"
-                                    }
+                                    msAccess,
+                                    vba,
+                                    msExcel
                                 }
                         }
                     }
                 }
             };
 
-            Technology wpf = new Technology()
-            {
-                Title = "WPF (personal usage only)"
-            };
-
-            Technology xamarin = new Technology()
-            {
-                Title = "Xamarin (personal usage only)"
-            };
-
 
             person.EducationSteps = new List<EducationStep>()
             {
-                new EducationStep()
+                new()
                 {
                     Institution = "BSTU",
                     Name = "Bachelor's Degree in Finance",
@@ -545,27 +515,69 @@ namespace BusinessCard
 
             person.Hobbies = new List<Hobby>()
             {
-                new Hobby()
+                new()
                 {
                     Title = "Musician",
                 },
-                new Hobby()
+                new()
                 {
                     Title = "Bike Traveller",
                 },
-                new Hobby()
+                new()
                 {
                     Title = "Cat Person",
                 },
             };
 
+            await _context.SaveChangesAsync();
+        }
 
-            context.Technologies.Add(wpf);
-            context.Technologies.Add(xamarin);
 
-            context.People.Add(person);
+        private async Task<Employer> EnsureEmployerCreated(string employerName)
+        {
+            var employer = await _context.Employers.FirstOrDefaultAsync(s => s.Name.Equals(employerName));
+            if (employer != null)
+            {
+                return employer;
+            }
 
-            await context.SaveChangesAsync();
+            employer = new Employer() {Name = employerName};
+
+            _context.Employers.Add(employer);
+
+            return employer;
+        }
+
+        private async Task<JobTitle> EnsureJobTitleCreated(string title, Action<JobTitle> init)
+        {
+            var jobTitle = await _context.JobTitles.FirstOrDefaultAsync(s => s.Name.Equals(title));
+            if (jobTitle != null)
+            {
+                return jobTitle;
+            }
+
+            jobTitle = new JobTitle() {Name = title};
+
+            init(jobTitle);
+
+            _context.JobTitles.Add(jobTitle);
+
+            return jobTitle;
+        }
+
+        private async Task<Technology> EnsureTechnologyCreated(string title)
+        {
+            var jobTitle = await _context.Technologies.FirstOrDefaultAsync(s => s.Title.Equals(title));
+            if (jobTitle != null)
+            {
+                return jobTitle;
+            }
+
+            jobTitle = new Technology() {Title = title};
+
+            _context.Technologies.Add(jobTitle);
+
+            return jobTitle;
         }
     }
 }
