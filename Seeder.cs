@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 using BusinessCard.Employers.Records;
 using BusinessCard.Employments.Records;
 using BusinessCard.Infrastructure;
@@ -14,37 +15,33 @@ namespace BusinessCard
 {
     public static class Seeder
     {
-        public static void Seed(Ctx context)
+        public static async Task SeedAsync(Ctx context)
         {
-            var isJustCreated = context.Database.EnsureCreated();
+            await context.Database.EnsureDeletedAsync();
+            await context.Database.MigrateAsync();
 
-            if (!isJustCreated)
+            var person = new Person()
             {
-                return;
-            }
+                Image = new PersonImage()
+            };
 
             var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("BusinessCard.Assets.image.png");
 
             byte[] buffer = new byte[stream.Length];
 
-            stream.Read(buffer);
+            await stream.ReadAsync(buffer);
 
-            Person person = new()
-            {
-                FirstName = "Andrei",
-                LastName = "Kuharchuk",
-                YearsOld = (int) (DateTime.UtcNow - new DateTime(1988, 07, 21)).TotalDays / 365,
-                Location = "Brest, Belarus",
-                Specialization = ".Net Developer",
-                Image = new PersonImage
-                {
-                    ContentType = "image/png",
-                    Bytes = buffer.ToArray()
-                },
-                Summary =
-                    "Seasoned .NET Developer with up to 10 years of hands-on experience adept at navigating both backend and front end development landscapes." +
-                    " Proficient in leveraging .NET technologies to deliver robust solutions effectively."
-            };
+            person.FirstName = "Andrei";
+            person.LastName = "Kuharchuk";
+            person.YearsOld = (int) (DateTime.UtcNow - new DateTime(1988, 07, 21)).TotalDays / 365;
+            person.Location = "Brest, Belarus";
+            person.Specialization = ".Net Developer";
+            person.Image.ContentType = "image/png";
+            person.Image.Bytes = buffer.ToArray();
+
+            person.Summary =
+                "Seasoned .NET Developer with up to 10 years of hands-on experience adept at navigating both backend and front end development landscapes." +
+                " Proficient in leveraging .NET technologies to deliver robust solutions effectively.";
 
             var godel = new Employer()
             {
@@ -207,7 +204,8 @@ namespace BusinessCard
                             Link = new Link()
                             {
                                 Address = "https://github.com/andkuh/business-card",
-                                Caption = "This page is implemented using that package along with classic controllers, see details",
+                                Caption =
+                                    "This page is implemented using that package along with classic controllers, see details",
                             },
                             Summary = "Router library",
                             Role = "Developer",
@@ -533,16 +531,14 @@ namespace BusinessCard
             };
 
 
-
-
             person.EducationSteps = new List<EducationStep>()
             {
                 new EducationStep()
                 {
-                    Institution = "BSTU", 
+                    Institution = "BSTU",
                     Name = "Bachelor's Degree in Finance",
-                    Location = "Brest, BY", 
-                    YearStarted = 2005, 
+                    Location = "Brest, BY",
+                    YearStarted = 2005,
                     YearFinished = 2010
                 }
             };
@@ -569,15 +565,7 @@ namespace BusinessCard
 
             context.People.Add(person);
 
-            try
-            {
-                context.SaveChanges();
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw;
-            }
+            await context.SaveChangesAsync();
         }
     }
 }

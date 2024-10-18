@@ -1,3 +1,5 @@
+using System;
+using System.Threading.Tasks;
 using BusinessCard;
 using BusinessCard.Employments.Endpoints;
 using BusinessCard.Employments.Services;
@@ -7,6 +9,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json.Serialization;
 using Router;
 using Router.Configuration;
@@ -27,8 +30,6 @@ builder.Services.AddSingleton<IModelToDtoMapper, ModelToDtoMapper>();
 builder.Services.AddScoped<IGetEmploymentsQueryHandler, GetEmploymentsQueryHandler>();
 builder.Services.AddScoped<IGetEmployments, IGetEmployments.Impl>();
 
-//builder.Services.AddDbContext<Ctx>(s => s.UseInMemoryDatabase("Context"));
-
 builder.Services.AddApiExpress(s =>
 {
     s.AddEndpoints(a => a.UseJson<CamelCasePropertyNamesContractResolver>())
@@ -47,11 +48,24 @@ var app = builder.Build();
 
 app.Lifetime.ApplicationStarted.Register(() =>
 {
-    var serviceScope = app.Services.CreateScope();
-
-    var ctx = serviceScope.ServiceProvider.GetRequiredService<Ctx>();
-
-    Seeder.Seed(ctx);
+    Task.Run(async () =>
+    {
+        using (var serviceScope = app.Services.CreateScope())
+        {
+            try
+            {
+                var ctx = serviceScope.ServiceProvider.GetRequiredService<Ctx>();
+                
+                await Seeder.SeedAsync(ctx);
+                
+                app.Logger.LogInformation("Seed succeeded");
+            }
+            catch (Exception e)
+            {
+                app.Logger.LogError("Seed failed with message: {message}", e.Message);
+            }
+        }
+    });
 });
 
 // Configure the HTTP request pipeline.
