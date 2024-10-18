@@ -8,6 +8,7 @@ using BusinessCard.Infrastructure;
 using BusinessCard.JobTitles.Records;
 using BusinessCard.People.Records;
 using BusinessCard.Technologies.Records;
+using Microsoft.EntityFrameworkCore;
 
 namespace BusinessCard
 {
@@ -15,8 +16,12 @@ namespace BusinessCard
     {
         public static void Seed(Ctx context)
         {
-            context.Database.EnsureDeleted();
-            context.Database.EnsureCreated();
+            var isJustCreated = context.Database.EnsureCreated();
+
+            if (!isJustCreated)
+            {
+                return;
+            }
 
             var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("BusinessCard.Assets.image.png");
 

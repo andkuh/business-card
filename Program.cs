@@ -36,7 +36,10 @@ builder.Services.AddApiExpress(s =>
         .AddData<Data>
         (
             data =>
-                data.UseDbContext<Ctx>(context => { context.UseInMemoryDatabase("BusinessCard"); })
+                data.UseDbContext<Ctx>(context =>
+                {
+                    context.UseSqlite("Data source=BusinessCard.db");
+                })
         );
 });
 

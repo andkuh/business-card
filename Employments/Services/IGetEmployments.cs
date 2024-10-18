@@ -23,7 +23,7 @@ namespace BusinessCard.Employments.Services
             {
                 var set = _context.Set<Employment>();
 
-                var queryable = set
+                var list = await set
                     .Include(s => s.Employer)
                     .Include(s => s.Person)
                     .Include(s => s.JobTitles)
@@ -33,9 +33,10 @@ namespace BusinessCard.Employments.Services
                     .ThenInclude(s => s.Duties)
                     .OrderByDescending(s => s.EndDate)
                     .Where(s => s.PersonId == id)
-                    .AsNoTracking();
+                    .AsNoTracking()
+                    .ToListAsync();
 
-                var employments = await queryable.OrderByDescending(s => s.StartDate)
+                var employments = list.OrderByDescending(s => s.StartDate)
                     .Select(s => new Model
                     {
                         Id = s.Id,
@@ -82,7 +83,7 @@ namespace BusinessCard.Employments.Services
                                     })
                             })
                     })
-                    .ToListAsync();
+                    .ToList();
 
                 return employments;
             }
