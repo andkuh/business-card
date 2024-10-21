@@ -3,6 +3,7 @@ using System;
 using BusinessCard.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BusinessCard.Migrations
 {
     [DbContext(typeof(Ctx))]
-    partial class CtxModelSnapshot : ModelSnapshot
+    [Migration("20241021130946_AddCascades")]
+    partial class AddCascades
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "6.0.0");
@@ -196,7 +198,7 @@ namespace BusinessCard.Migrations
 
                     b.HasIndex("PersonId");
 
-                    b.ToTable("EducationSteps");
+                    b.ToTable("EducationStep");
                 });
 
             modelBuilder.Entity("BusinessCard.People.Records.Hobby", b =>
@@ -216,7 +218,7 @@ namespace BusinessCard.Migrations
 
                     b.HasIndex("PersonId");
 
-                    b.ToTable("Hobbies", (string)null);
+                    b.ToTable("Hobby");
                 });
 
             modelBuilder.Entity("BusinessCard.People.Records.Person", b =>

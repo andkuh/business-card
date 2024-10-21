@@ -10,7 +10,7 @@ namespace BusinessCard.Infrastructure.Configurations.Employments
         {
             builder.HasKey(s => s.Id);
 
-            builder.HasMany(s => s.Assignments).WithOne(s => s.Employment);
+            builder.HasMany(s => s.Assignments).WithOne(s => s.Employment).OnDelete(DeleteBehavior.Cascade);
 
             builder.HasOne(s => s.Employer).WithMany(s => s.Employments);
 
