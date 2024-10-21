@@ -8,6 +8,7 @@ using BusinessCard.Employments.Records;
 using BusinessCard.Infrastructure;
 using BusinessCard.JobTitles.Records;
 using BusinessCard.People.Records;
+using BusinessCard.Seed;
 using BusinessCard.Technologies.Records;
 using Microsoft.EntityFrameworkCore;
 
@@ -17,7 +18,7 @@ namespace BusinessCard
     {
         public static async Task SeedAsync(Ctx context)
         {
-            var dataAsync = await SeedData.GetDataAsync();
+            var dataAsync = FactoryOfMe.Produce();
 
             await new Seeder(context).SeedAsync(dataAsync);
         }
@@ -25,7 +26,7 @@ namespace BusinessCard
         private async Task SeedAsync(PersonData data)
         {
             await _context.Database.MigrateAsync();
-            
+
             var person = await _context.People
                 .Include(s => s.Employments)
                 .ThenInclude(s => s.Assignments)
@@ -35,11 +36,15 @@ namespace BusinessCard
                 .ThenInclude(s => s.Technologies)
                 .Include(s => s.Employments)
                 .ThenInclude(s => s.Employer)
+                .Include(s => s.Employments)
+                .ThenInclude(s => s.JobTitles)
                 .Include(s => s.Hobbies)
                 .Include(s => s.EducationSteps)
                 .AsSplitQuery()
                 .FirstOrDefaultAsync(s =>
                     s.FirstName.Equals(data.FirstName) && s.LastName.Equals(data.LastName));
+
+            var technologies = await _context.Technologies.ToListAsync();
 
             if (person == null)
             {
@@ -132,7 +137,7 @@ namespace BusinessCard
                                 technologyData => new Technology()
                                 {
                                     Title = technologyData.Title
-                                });
+                                }, existingList: technologies);
 
                             assignment.Link = assignmentData.Link != null
                                 ? MapLink(assignmentData.Link, assignment.Link ?? new Link())
@@ -219,15 +224,18 @@ namespace BusinessCard
             this IEnumerable<TSource> sourceList,
             IEnumerable<TTarget> targetList,
             Func<TSource, TTarget, bool> matchPredicate,
-            Func<TSource, TTarget> targetItemFactory, Action<TSource, TTarget>? map = null)
+            Func<TSource, TTarget> targetItemFactory, Action<TSource, TTarget>? map = null,
+            List<TTarget>? existingList = null)
         {
             var sourceItems = sourceList?.ToList() ?? new List<TSource>();
-            
+
             List<TTarget> targets = targetList?.ToList() ?? new List<TTarget>();
+
+            IEnumerable<TTarget> pool = existingList ?? targets;
 
             foreach (var sourceItem in sourceItems)
             {
-                var existingTargetItem = targets.FirstOrDefault(t => matchPredicate(sourceItem, t));
+                var existingTargetItem = pool.FirstOrDefault(t => matchPredicate(sourceItem, t));
 
                 if (existingTargetItem != null)
                 {
@@ -239,8 +247,12 @@ namespace BusinessCard
                 {
                     // Create a new target item using the factory delegate
                     var newTargetItem = targetItemFactory(sourceItem);
+
                     map?.Invoke(sourceItem, newTargetItem);
+
                     targets.Add(newTargetItem);
+
+                    existingList?.Add(newTargetItem);
                 }
             }
 
@@ -250,5 +262,12 @@ namespace BusinessCard
 
             return targets;
         }
+    }
+
+    public interface IStrategy
+    {
+        TTarget Find<TSource, TTarget>(Func<TSource, TTarget, bool> matchPredicate);
+
+        void Add();
     }
 }
