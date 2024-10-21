@@ -24,6 +24,12 @@ steps:
   inputs:
     restoreSolution: '$(solution)'
 
+- task: NodeTool@0
+  inputs:
+    versionSource: 'spec'
+    versionSpec: '18.x'
+    checkLatest: true
+
 - task: DotNetCoreCLI@2
   inputs:
     command: 'publish'
