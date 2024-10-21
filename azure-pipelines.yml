@@ -1,0 +1,42 @@
+# ASP.NET Core (.NET Framework)
+# Build and test ASP.NET Core projects targeting the full .NET Framework.
+# Add steps that publish symbols, save build artifacts, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
+
+trigger:
+- master
+
+pool:
+  vmImage: 'windows-latest'
+
+variables:
+  solution: '**/*.sln'
+  buildPlatform: 'Any CPU'
+  buildConfiguration: 'Release'
+  FTP_SERVER_URL: $(FTP_SERVER_URL)
+  FTP_USERNAME: $(FTP_USERNAME_URL)
+  FTP_PASSWORD: $(FTP_PASSWORD_URL)
+
+steps:
+- task: NuGetToolInstaller@1
+
+- task: NuGetCommand@2
+  inputs:
+    restoreSolution: '$(solution)'
+
+- task: DotNetCoreCLI@2
+  inputs:
+    command: 'publish'
+    publishWebProjects: true
+    arguments: '--configuration Release --output $(Build.ArtifactStagingDirectory)'
+    zipAfterPublish: true
+
+- task: FtpUpload@2
+  inputs:
+    credentialsOption: 'inputs'
+    serverUrl: $(FTP_SERVER_URL)
+    username: '<FTP_USERNAME>'
+    password: '<FTP_PASSWORD>'
+    rootDirectory: '$(Build.ArtifactStagingDirectory)'
+    remoteDirectory: '/app'
+    clean: true
