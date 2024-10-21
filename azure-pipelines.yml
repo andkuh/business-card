@@ -13,9 +13,9 @@ variables:
   solution: '**/*.sln'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
-  FTP_SERVER_URL: $(FTP_SERVER_URL)
-  FTP_USERNAME: $(FTP_USERNAME_URL)
-  FTP_PASSWORD: $(FTP_PASSWORD_URL)
+  ftp: $(FTP_SERVER_URL)
+  username: $(FTP_USERNAME_URL)
+  password: $(FTP_PASSWORD_URL)
 
 steps:
 - task: NuGetToolInstaller@1
@@ -34,9 +34,9 @@ steps:
 - task: FtpUpload@2
   inputs:
     credentialsOption: 'inputs'
-    serverUrl: $(FTP_SERVER_URL)
-    username: '<FTP_USERNAME>'
-    password: '<FTP_PASSWORD>'
+    serverUrl: $(ftp)
+    username: '$(username)'
+    password: '$(password)'
     rootDirectory: '$(Build.ArtifactStagingDirectory)'
     remoteDirectory: '/app'
     clean: true
