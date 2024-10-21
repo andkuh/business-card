@@ -23,6 +23,10 @@ namespace BusinessCard.Infrastructure.Configurations.Employments
             builder.Property(s => s.Summary).HasMaxLength(1024);
 
             builder.OwnsOne(s => s.Link);
+
+            builder.HasMany(s => s.Duties).WithOne().OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasMany(s => s.Technologies).WithMany(s => s.Assignments);
         }
     }
 }

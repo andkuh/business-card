@@ -28,15 +28,21 @@ namespace BusinessCard.Infrastructure
             modelBuilder.ApplyConfiguration(new AssignmentConfiguration());
             modelBuilder.ApplyConfiguration(new DutyConfiguration());
             modelBuilder.ApplyConfiguration(new TechnologyConfiguration());
+            modelBuilder.ApplyConfiguration(new HobbyConfiguration());
         }
         
         public DbSet<Person> People { get; set; }
         
         public DbSet<Employment> Employments { get; set; }
         
+        public DbSet<Hobby> Hobbies { get; set; }
+        
+        public DbSet<EducationStep> EducationSteps { get; set; }
+
         public DbSet<Employer> Employers { get; set; }
         
         public DbSet<JobTitle> JobTitles { get; set; }
+        
         public DbSet<Assignment> Assignments { get; set; }
         
         public DbSet<Technology> Technologies { get; set; }

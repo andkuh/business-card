@@ -2,577 +2,272 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 using BusinessCard.Employers.Records;
 using BusinessCard.Employments.Records;
 using BusinessCard.Infrastructure;
 using BusinessCard.JobTitles.Records;
 using BusinessCard.People.Records;
+using BusinessCard.Seed;
 using BusinessCard.Technologies.Records;
+using Microsoft.EntityFrameworkCore;
 
 namespace BusinessCard
 {
-    public static class Seeder
+    public class Seeder
     {
-        public static void Seed(Ctx context)
+        public static async Task SeedAsync(Ctx context)
         {
-            context.Database.EnsureDeleted();
-            context.Database.EnsureCreated();
+            var dataAsync = FactoryOfMe.Produce();
 
-            var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream("BusinessCard.Assets.image.png");
-
-            byte[] buffer = new byte[stream.Length];
-
-            stream.Read(buffer);
-
-            Person person = new()
-            {
-                FirstName = "Andrei",
-                LastName = "Kuharchuk",
-                YearsOld = (int) (DateTime.UtcNow - new DateTime(1988, 07, 21)).TotalDays / 365,
-                Location = "Brest, Belarus",
-                Specialization = ".Net Developer",
-                Image = new PersonImage
-                {
-                    ContentType = "image/png",
-                    Bytes = buffer.ToArray()
-                },
-                Summary =
-                    "Seasoned .NET Developer with up to 10 years of hands-on experience adept at navigating both backend and front end development landscapes." +
-                    " Proficient in leveraging .NET technologies to deliver robust solutions effectively."
-            };
-
-            var godel = new Employer()
-            {
-                Name = "Godel Technologies Europe, BY"
-            };
-            var eComm = new Employer()
-            {
-                Name = "E-commerce Product Company, BY"
-            };
-
-            var sabbatical = new Employer()
-            {
-                Name = "Career break (Sabbatical)"
-            };
-
-            var logistics = new Employer()
-            {
-                Name = "Logistics Company, BY", //Id = 5
-            };
-
-            context.Employers.Add(godel);
-            context.Employers.Add(eComm);
-            context.Employers.Add(sabbatical);
-            context.Employers.Add(logistics);
-
-            JobTitle baPm = new()
-            {
-                Name = "BA / PM",
-                StartDate = new DateTime(2017, 5, 1),
-                EndDate = new DateTime(2018, 4, 1)
-            };
-
-            JobTitle dev = new()
-            {
-                Name = "Software Developer",
-                StartDate = new DateTime(2018, 4, 13),
-                EndDate = new DateTime(2021, 11, 1)
-            };
-            JobTitle seniorDev = new()
-            {
-                Name = "Senior Software Developer",
-                StartDate = new DateTime(2021, 11, 1),
-                EndDate = new DateTime(2023, 4, 12)
-            };
-
-            context.JobTitles.Add(baPm);
-            context.JobTitles.Add(dev);
-            context.JobTitles.Add(seniorDev);
-
-            Technology html = new()
-            {
-                Title = "HTML"
-            };
-            Technology css = new()
-            {
-                Title = "CSS"
-            };
-            Assignment baAssignment = new()
-            {
-                Name = "BA / PM support of development",
-                Role = "Business analyst / Project manager",
-                StartDate = new DateTime(2017, 5, 1),
-                Summary = "E-commerce application build with Ruby on Rails framework",
-                Description =
-                    "Business analysis and project management for one of belarusian e-commerce companies, task creation, workload planning, developing prototypes",
-                EndDate = new DateTime(2018, 4, 1),
-                Duties = new List<Duty>
-                {
-                    new()
-                    {
-                        Description = "Business needs analysis"
-                    },
-                    new()
-                    {
-                        Description = "Feature management"
-                    },
-                    new()
-                    {
-                        Description = "Technical discussions participation"
-                    },
-                    new()
-                    {
-                        Description = "UI/UX"
-                    },
-                    new()
-                    {
-                        Description = "Manual quality assurance"
-                    }
-                },
-                Technologies = new List<Technology>()
-                {
-                    html, css,
-                }
-            };
-
-            context.Assignments.Add(baAssignment);
-
-            Technology cSharp = new()
-            {
-                Title = "C#"
-            };
-            Technology typeScript = new()
-            {
-                Title = "Typescript"
-            };
-            Technology javaScript = new()
-            {
-                Title = "Javascript"
-            };
-            Technology efCore = new()
-            {
-                Title = "Entity Framework Core"
-            };
-            Technology vbNet = new()
-            {
-                Title = "VB.NET"
-            };
-            Technology rabbitMq = new()
-            {
-                Title = "Rabbit MQ"
-            };
-            Technology aspNetCore = new()
-            {
-                Title = "ASP.NET Core"
-            };
-            Technology msSqlServer = new()
-            {
-                Title = "MS SQL Server"
-            };
-            Technology dotnetFramework = new Technology()
-            {
-                Title = ".NET Framework 4.8"
-            };
-            Technology angular = new()
-            {
-                Title = "Angular"
-            };
-            Technology mySql = new()
-            {
-                Title = "MySql"
-            };
-
-
-            person.Employments = new List<Employment>()
-            {
-                new()
-                {
-                    StartDate = new DateTime(2023, 4, 13),
-                    Employer = sabbatical,
-                    Assignments = new List<Assignment>()
-                    {
-                        new()
-                        {
-                            StartDate = new DateTime(2020, 5, 1),
-                            Name = "'DotExpress' Library (Pet Project)",
-                            EndDate = DateTime.Today,
-                            Description =
-                                "Nuget package providing alternative, fast and easy approach to develop web api. This application uses a little piece of this lib, see the link below the source code",
-
-                            Link = new Link()
-                            {
-                                Address = "https://github.com/andkuh/business-card",
-                                Caption = "This page is implemented using that package along with classic controllers, see details",
-                            },
-                            Summary = "Router library",
-                            Role = "Developer",
-                            Technologies = new List<Technology>()
-                            {
-                                cSharp, efCore, rabbitMq, msSqlServer, typeScript, angular
-                            },
-                            Duties = new List<Duty>()
-                            {
-                                new()
-                                {
-                                    Description = "Features Design and Development",
-                                },
-                                new()
-                                {
-                                    Description = "Unit testing",
-                                },
-                            }
-                        }
-                    },
-                    JobTitles = new List<JobTitle>()
-                    {
-                        new()
-                        {
-                            Name = "Software Developer. Still :)",
-                            StartDate = new DateTime(2023, 4, 13),
-                            EndDate = DateTime.Today
-                        }
-                    }
-                },
-                new()
-                {
-                    Employer = godel,
-                    StartDate = new DateTime(2018, 4, 13),
-                    Person = person,
-                    EndDate = new DateTime(2023, 4, 12),
-                    JobTitles = new List<JobTitle>()
-                    {
-                        dev,
-                        seniorDev
-                    },
-                    Assignments = new List<Assignment>()
-                    {
-                        new()
-                        {
-                            Name = "E-Commerce app",
-                            Role = "Developer",
-                            StartDate = new DateTime(2018, 06, 01),
-                            EndDate = new DateTime(2018, 09, 01),
-                            Summary = "Microservice system built based on .NET Core, AngularJS, RabbitMQ etc",
-                            Description =
-                                "A global digital sports platform that consists of several businesses, " +
-                                "including licensed sports merchandise, trading cards and collectibles, " +
-                                "sports betting and iGaming, special events, and live commerce",
-                            Duties = new List<Duty>()
-                            {
-                                new()
-                                {
-                                    Description = "Features Design and Development"
-                                },
-                                new()
-                                {
-                                    Description = "Unit-tests and bug fixes"
-                                },
-                                new()
-                                {
-                                    Description = "Third party service integration"
-                                }
-                            },
-                            Technologies = new List<Technology>()
-                            {
-                                cSharp,
-                                typeScript,
-                                javaScript,
-                                efCore,
-                                vbNet,
-                                html,
-                                css,
-                                rabbitMq,
-                                aspNetCore,
-                                msSqlServer
-                            }
-                        },
-                        new()
-                        {
-                            Name = "Godel's internal project",
-                            Role = "Developer",
-                            StartDate = new DateTime(2018, 09, 01),
-                            EndDate = new DateTime(2018, 11, 01),
-                            Description = "Internal human resources management tool",
-                            Summary = "Application built using .NET, Angular 2+, EF Core etc",
-                            Duties = new List<Duty>()
-                            {
-                                new()
-                                {
-                                    Description = "Features Design and Development",
-                                },
-                                new()
-                                {
-                                    Description = "Unit-tests and bug fixes"
-                                },
-                            },
-                            Technologies = new List<Technology>()
-                            {
-                                cSharp,
-                                angular,
-                                msSqlServer,
-                                mySql,
-                                aspNetCore,
-                                css,
-                                html,
-                                efCore,
-                                typeScript
-                            }
-                        },
-                        new()
-                        {
-                            Name = "Financial advisers system",
-                            Description = "Technology solution for financial advisors and financial services firms",
-                            Summary = "Migration of micro services from .NET Framework to .NET Core",
-                            StartDate = new DateTime(2018, 11, 1),
-                            EndDate = new DateTime(2019, 5, 1), Role = "Developer",
-                            Duties = new List<Duty>()
-                            {
-                                new()
-                                {
-                                    Description = "Migration of microservices from .NET Framework 4.7 to .NET Core",
-                                },
-                                new()
-                                {
-                                    Description = "Unit-tests and bug fixes"
-                                }
-                            },
-                            Technologies = new List<Technology>()
-                            {
-                                aspNetCore, cSharp, efCore, msSqlServer, dotnetFramework
-                            }
-                        },
-                        new()
-                        {
-                            Name = "Printing production costs calculation application",
-                            StartDate = new DateTime(2019, 5, 1),
-                            Summary = "Application system built using .NET Core, EF Core, Rabbit MQ, etc",
-                            EndDate = new DateTime(2023, 2, 1),
-                            Description =
-                                "Management Information Software for the printing, packaging and label industries",
-                            Role = "Developer",
-                            Duties = new List<Duty>()
-                            {
-                                new()
-                                {
-                                    Description = "Features Design and Development",
-                                },
-                                new()
-                                {
-                                    Description = "Code reviews",
-                                },
-                                new()
-                                {
-                                    Description = "Unit-tests and bug fixes"
-                                },
-                                new()
-                                {
-                                    Description = "Third party service integration"
-                                }
-                            },
-                            Technologies = new List<Technology>()
-                            {
-                                cSharp,
-                                aspNetCore,
-                                html,
-                                css,
-                                rabbitMq, efCore, msSqlServer, typeScript,
-                                new Technology() {Title = "Kendo UI"}
-                            }
-                        }
-                    }
-                },
-                new()
-                {
-                    PersonId = 1,
-                    Employer = eComm,
-                    StartDate = new DateTime(2017, 5, 1),
-                    EndDate = new DateTime(2018, 4, 1),
-                    Person = person,
-                    JobTitles = new List<JobTitle>()
-                    {
-                        baPm
-                    },
-                    Assignments = new List<Assignment>()
-                    {
-                        baAssignment
-                    }
-                },
-                new()
-                {
-                    Person = person,
-                    Employer = new Employer() {Name = "Self-Education"},
-                    StartDate = new DateTime(2016, 4, 1),
-                    JobTitles = new List<JobTitle>()
-                    {
-                        new()
-                        {
-                            Name = "Lead .NET Self-Educator :)",
-                            StartDate = new DateTime(2016, 4, 1),
-                            EndDate = new DateTime(2018, 4, 1)
-                        },
-                    },
-                    Assignments = new List<Assignment>()
-                    {
-                        new()
-                        {
-                            StartDate = new DateTime(2016, 4, 1),
-                            EndDate = new DateTime(2018, 4, 1),
-                            Name = "Learning ASP.NET C# Coding",
-                            Description =
-                                "Follow my experience as I delve into the world of ASP.NET C# coding, a framework essential for web application development.",
-                            Summary =
-                                "My path to mastering ASP.NET C# coding begins with grasping the fundamentals of the C# language, " +
-                                "exploring the intricacies of the ASP.NET framework, delving into web forms, MVC, and APIs, " +
-                                "honing my skills through hands-on coding challenges and projects, and keeping abreast of the ever-evolving web development landscape.",
-                            Role = "Student", Technologies = new List<Technology>()
-                            {
-                                aspNetCore, efCore, css, html, javaScript, cSharp
-                            },
-                            Duties = new List<Duty>()
-                            {
-                                new()
-                                {
-                                    Description = "Learning"
-                                },
-                                new()
-                                {
-                                    Description = "Learning"
-                                },
-                                new()
-                                {
-                                    Description = "Learning once again"
-                                }
-                            }
-                        }
-                    },
-                },
-                new()
-                {
-                    Employer = logistics,
-                    StartDate = new DateTime(2013, 4, 1),
-                    EndDate = new DateTime(2016, 4, 1),
-                    Person = person,
-                    JobTitles = new List<JobTitle>()
-                    {
-                        new()
-                        {
-                            Name = "Software Developer",
-                            EndDate = new DateTime(2016, 4, 1),
-                            StartDate = new DateTime(2014, 8, 1)
-                        },
-                        new()
-                        {
-                            Name = "Economist",
-                            EndDate = new DateTime(2014, 8, 1),
-                            StartDate = new DateTime(2013, 4, 1)
-                        }
-                    },
-                    Assignments = new List<Assignment>()
-                    {
-                        new()
-                        {
-                            EndDate = new DateTime(2016, 4, 1),
-                            StartDate = new DateTime(2014, 8, 1),
-                            Name = "Financial department workflow application",
-                            Summary = "Application to simplify financial workflow",
-                            Description = "Application system for financial department document workflow",
-                            Role = "Developer",
-                            Technologies =
-                                new List<Technology>()
-                                {
-                                    cSharp, msSqlServer,
-                                    new()
-                                    {
-                                        Title = "Windows Forms"
-                                    }
-                                }
-                        },
-                        new()
-                        {
-                            EndDate = new DateTime(2016, 4, 1),
-                            StartDate = new DateTime(2013, 4, 1),
-                            Name = "MS Excel driven invoicing application",
-                            Summary = "Application to simplify invoicing",
-                            Description =
-                                "Visual Basic for Applications driven Excel files to manage invoicing process",
-                            Role = "Economist / Developer",
-                            Technologies =
-                                new List<Technology>
-                                {
-                                    new()
-                                    {
-                                        Title = "MS ACCESS"
-                                    },
-                                    new()
-                                    {
-                                        Title = "VBA"
-                                    },
-                                    new()
-                                    {
-                                        Title = "MS Excel"
-                                    }
-                                }
-                        }
-                    }
-                }
-            };
-
-            Technology wpf = new Technology()
-            {
-                Title = "WPF (personal usage only)"
-            };
-
-            Technology xamarin = new Technology()
-            {
-                Title = "Xamarin (personal usage only)"
-            };
-
-
-
-
-            person.EducationSteps = new List<EducationStep>()
-            {
-                new EducationStep()
-                {
-                    Institution = "BSTU", 
-                    Name = "Bachelor's Degree in Finance",
-                    Location = "Brest, BY", 
-                    YearStarted = 2005, 
-                    YearFinished = 2010
-                }
-            };
-
-            person.Hobbies = new List<Hobby>()
-            {
-                new Hobby()
-                {
-                    Title = "Musician",
-                },
-                new Hobby()
-                {
-                    Title = "Bike Traveller",
-                },
-                new Hobby()
-                {
-                    Title = "Cat Person",
-                },
-            };
-
-
-            context.Technologies.Add(wpf);
-            context.Technologies.Add(xamarin);
-
-            context.People.Add(person);
-
-            try
-            {
-                context.SaveChanges();
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-                throw;
-            }
+            await new Seeder(context).SeedAsync(dataAsync);
         }
+
+        private async Task SeedAsync(PersonData data)
+        {
+            await _context.Database.MigrateAsync();
+
+            var person = await _context.People
+                .Include(s => s.Employments)
+                .ThenInclude(s => s.Assignments)
+                .ThenInclude(s => s.Duties)
+                .Include(s => s.Employments)
+                .ThenInclude(s => s.Assignments)
+                .ThenInclude(s => s.Technologies)
+                .Include(s => s.Employments)
+                .ThenInclude(s => s.Employer)
+                .Include(s => s.Employments)
+                .ThenInclude(s => s.JobTitles)
+                .Include(s => s.Hobbies)
+                .Include(s => s.EducationSteps)
+                .AsSplitQuery()
+                .FirstOrDefaultAsync(s =>
+                    s.FirstName.Equals(data.FirstName) && s.LastName.Equals(data.LastName));
+
+            var technologies = await _context.Technologies.ToListAsync();
+
+            if (person == null)
+            {
+                person = new Person() {Image = new PersonImage()};
+                _context.People.Add(person);
+            }
+
+            person.FirstName = data.FirstName;
+            person.LastName = data.LastName;
+            person.Image.ContentType = data.Image.ContentType;
+            person.Image.Bytes = data.Image.Bytes;
+
+            person.Location = data.Location;
+            person.Summary = data.Summary;
+            person.Specialization = data.Specialization;
+            person.YearsOld = data.YearsOld;
+
+            person.Hobbies = data.Hobbies
+                .Distinct()
+                .Synchronize(person.Hobbies,
+                    (s, hobby) => s == hobby.Title,
+                    s => new Hobby() {Title = s}
+                )
+                .DistinctBy(s => s.Title)
+                .ToList();
+
+
+            person.EducationSteps =
+                data.EducationSteps
+                    .Distinct()
+                    .Synchronize
+                    (
+                        targetList: person.EducationSteps,
+                        matchPredicate: (stepData, step) => stepData.Name == step.Name,
+                        targetItemFactory: stepData => new EducationStep()
+                        {
+                            Name = stepData.Name
+                        },
+                        map: (stepData, step) =>
+                        {
+                            step.Institution = stepData.Institution;
+                            step.Location = stepData.Location;
+                            step.YearFinished = stepData.YearFinished;
+                            step.YearStarted = stepData.YearStarted;
+                        }
+                    )
+                    .DistinctBy(s => s.Name)
+                    .ToList();
+
+            person.Employments = data.Employments.Synchronize
+            (
+                targetList: person.Employments,
+                matchPredicate: (employmentData, employment) =>
+                    employmentData.Employer.Name == employment.Employer.Name, employmentData => new Employment()
+                {
+                    Employer = new Employer()
+                    {
+                        Name = employmentData.Employer.Name
+                    }
+                },
+                map: (employmentData, employment) =>
+                {
+                    employment.EndDate = employmentData.EndDate;
+                    employment.StartDate = employmentData.StartDate;
+                    employment.JobTitles = employmentData.JobTitles.Synchronize
+                    (
+                        targetList: employment.JobTitles,
+                        matchPredicate: (titleData, title) => titleData.Name == title.Name,
+                        targetItemFactory: titleData => new JobTitle() {Name = titleData.Name}, (titleData, title) =>
+                        {
+                            title.EndDate = titleData.EndDate;
+                            title.StartDate = titleData.StartDate;
+                        }
+                    );
+
+                    employment.Assignments = employmentData.Assignments.Synchronize(employment.Assignments,
+                        (assignmentData, assignment) => assignmentData.Name == assignment.Name,
+                        assignmentData => new Assignment() {Name = assignmentData.Name},
+                        (
+                            assignmentData, assignment) =>
+                        {
+                            assignment.Description = assignmentData.Description;
+                            assignment.Name = assignmentData.Name;
+                            assignment.Role = assignmentData.Role;
+                            assignment.Summary = assignmentData.Summary;
+                            assignment.StartDate = assignmentData.StartDate;
+                            assignment.EndDate = assignmentData.EndDate;
+                            assignment.Technologies = assignmentData.Technologies.Synchronize(assignment.Technologies,
+                                (technologyData, technology) => technologyData.Title == technology.Title,
+                                technologyData => new Technology()
+                                {
+                                    Title = technologyData.Title
+                                }, existingList: technologies);
+
+                            assignment.Link = assignmentData.Link != null
+                                ? MapLink(assignmentData.Link, assignment.Link ?? new Link())
+                                : null;
+
+                            assignment.Duties = assignmentData
+                                .Duties
+                                .Synchronize(assignment.Duties,
+                                    (s, duty) => s == duty.Description, s => new Duty() {Description = s});
+                        });
+                }
+            );
+
+            Link MapLink(LinkData linkData, Link link)
+            {
+                link.Address = linkData.Address;
+                link.Caption = linkData.Caption;
+
+                return link;
+            }
+
+            await _context.SaveChangesAsync();
+        }
+
+        private readonly Ctx _context;
+
+        private Seeder(Ctx context)
+        {
+            _context = context;
+        }
+
+        private async Task<Employer> EnsureEmployerCreated(string employerName)
+        {
+            var employer = await _context.Employers.FirstOrDefaultAsync(s => s.Name.Equals(employerName));
+            if (employer != null)
+            {
+                return employer;
+            }
+
+            employer = new Employer() {Name = employerName};
+
+            _context.Employers.Add(employer);
+
+            return employer;
+        }
+
+        private async Task<JobTitle> EnsureJobTitleCreated(string title, Action<JobTitle> init)
+        {
+            var jobTitle = await _context.JobTitles.FirstOrDefaultAsync(s => s.Name.Equals(title));
+            if (jobTitle != null)
+            {
+                return jobTitle;
+            }
+
+            jobTitle = new JobTitle() {Name = title};
+
+            init(jobTitle);
+
+            _context.JobTitles.Add(jobTitle);
+
+            return jobTitle;
+        }
+
+        private async Task<Technology> EnsureTechnologyCreated(string title)
+        {
+            var jobTitle = await _context.Technologies.FirstOrDefaultAsync(s => s.Title.Equals(title));
+            if (jobTitle != null)
+            {
+                return jobTitle;
+            }
+
+            jobTitle = new Technology() {Title = title};
+
+            _context.Technologies.Add(jobTitle);
+
+            return jobTitle;
+        }
+    }
+
+
+    public static class Ext
+    {
+        public static List<TTarget> Synchronize<TSource, TTarget>(
+            this IEnumerable<TSource> sourceList,
+            IEnumerable<TTarget> targetList,
+            Func<TSource, TTarget, bool> matchPredicate,
+            Func<TSource, TTarget> targetItemFactory, Action<TSource, TTarget>? map = null,
+            List<TTarget>? existingList = null)
+        {
+            var sourceItems = sourceList?.ToList() ?? new List<TSource>();
+
+            List<TTarget> targets = targetList?.ToList() ?? new List<TTarget>();
+
+            IEnumerable<TTarget> pool = existingList ?? targets;
+
+            foreach (var sourceItem in sourceItems)
+            {
+                var existingTargetItem = pool.FirstOrDefault(t => matchPredicate(sourceItem, t));
+
+                if (existingTargetItem != null)
+                {
+                    // Update existing target item with source item
+                    map?.Invoke(sourceItem, existingTargetItem);
+                    // Update other properties as needed
+                }
+                else
+                {
+                    // Create a new target item using the factory delegate
+                    var newTargetItem = targetItemFactory(sourceItem);
+
+                    map?.Invoke(sourceItem, newTargetItem);
+
+                    targets.Add(newTargetItem);
+
+                    existingList?.Add(newTargetItem);
+                }
+            }
+
+            // Remove items from the target list that do not have a corresponding source item
+            targets.RemoveAll(t => !sourceItems.Any(s => matchPredicate(s, t)));
+
+
+            return targets;
+        }
+    }
+
+    public interface IStrategy
+    {
+        TTarget Find<TSource, TTarget>(Func<TSource, TTarget, bool> matchPredicate);
+
+        void Add();
     }
 }
