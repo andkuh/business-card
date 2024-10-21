@@ -31,6 +31,15 @@ steps:
     checkLatest: true
 
 - task: DotNetCoreCLI@2
+  displayName: Restore
+  inputs:
+    command: restore
+    projects: '$(restoreBuildProjects)'
+    vstsFeed: 'f2b5c742-0b81-4c39-90a2-3fe17317d78a/9170686c-f539-468e-b748-5e7e2dff1130'
+    verbosityRestore: Detailed
+    verbosityPack: Detailed
+
+- task: DotNetCoreCLI@2
   inputs:
     command: 'publish'
     publishWebProjects: true
