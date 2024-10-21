@@ -1,100 +1,13 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
-using BusinessCard.Employers.Records;
-using BusinessCard.Employments.Records;
-using BusinessCard.Infrastructure;
-using BusinessCard.JobTitles.Records;
-using BusinessCard.People.Records;
-using BusinessCard.Technologies.Records;
-using Microsoft.EntityFrameworkCore;
 
-namespace BusinessCard
+namespace BusinessCard.Seed
 {
-    public class HobbyData
+    public static class FactoryOfMe
     {
-        public string Title { get; set; }
-    }
-
-    public class EducationStepData
-    {
-        public string Institution { get; set; }
-        public string Name { get; set; }
-        public string Location { get; set; }
-        public int YearStarted { get; set; }
-        public int YearFinished { get; set; }
-    }
-
-    public class JobTitleData
-    {
-        public string Name { get; set; }
-        public DateTime StartDate { get; set; }
-        public DateTime EndDate { get; set; }
-    }
-    public class PersonData
-    {
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public string Specialization { get; set; }
-        public int YearsOld { get; set; }
-        public string Location { get; set; }
-        public PersonImageData Image { get; set; }
-        public string Summary { get; set; }
-        public IEnumerable<EmploymentData> Employments { get; set; }
-        public IEnumerable<EducationStepData> EducationSteps { get; set; }
-        public IEnumerable<string> Hobbies { get; set; }
-    }
-
-    public class EmploymentData
-    {
-        public DateTime StartDate { get; set; }
-        public EmployerData Employer { get; set; }
-        public IEnumerable<AssignmentData> Assignments { get; set; }
-        public IEnumerable<JobTitleData> JobTitles { get; set; }
-        public DateTime EndDate { get; set; }
-    }
-
-    public class AssignmentData
-    {
-        public DateTime StartDate { get; set; }
-        public string Name { get; set; }
-        public DateTime EndDate { get; set; }
-        public string Description { get; set; }
-        public LinkData? Link { get; set; }
-        public string Summary { get; set; }
-        public string Role { get; set; }
-        public IEnumerable<TechnologyData> Technologies { get; set; }
-        public IEnumerable<string> Duties { get; set; }
-    }
-
-    public class LinkData
-    {
-        public string Address { get; set; }
-        public string Caption { get; set; }
-    }
-
-    public class TechnologyData
-    {
-        public string Title { get; set; }
-    }
-
-    public class EmployerData
-    {
-        public string Name { get; set; }
-    }
-
-
-    public class PersonImageData
-    {
-        public string ContentType { get; set; }
-        public byte[] Bytes { get; set; }
-    }
-
-    public static class SeedData
-    {
-        public static async Task<PersonData> GetDataAsync()
+        public static PersonData Produce()
         {
             const string? name = "Andrei";
             const string? lastName = "Kukharchuk";
@@ -110,7 +23,7 @@ namespace BusinessCard
 
             var buffer = new byte[stream.Length];
 
-            await stream.ReadAsync(buffer);
+            stream.Read(buffer);
 
             person.FirstName = name;
             person.LastName = lastName;
@@ -144,23 +57,18 @@ namespace BusinessCard
                 Name = "Logistics Company, BY"
             };
 
-            var baPm = EnsureJobTitleCreated("BA / PM", t =>
-            {
-                t.StartDate = new DateTime(2017, 5, 1);
-                t.EndDate = new DateTime(2018, 4, 1);
-            });
+            var baPm = new JobTitleData()
+                {Name = "BA / PM", StartDate = new DateTime(2017, 5, 1), EndDate = new DateTime(2018, 4, 1)};
 
-            var dev = EnsureJobTitleCreated("Software Developer", t =>
+            var dev = new JobTitleData()
             {
-                t.StartDate = new DateTime(2018, 4, 13);
-                t.EndDate = new DateTime(2021, 11, 1);
-            });
+                Name = "Software Developer", StartDate = new DateTime(2018, 4, 13), EndDate = new DateTime(2021, 11, 1)
+            };
 
-            var seniorDev = EnsureJobTitleCreated("Software Developer", t =>
+            var seniorDev = new JobTitleData()
             {
-                t.StartDate = new DateTime(2021, 11, 1);
-                t.EndDate = new DateTime(2023, 4, 12);
-            });
+                Name = "Software Developer", StartDate = new DateTime(2021, 11, 1), EndDate = new DateTime(2023, 4, 12)
+            };
 
             var html = NewTechnology("HTML");
 
@@ -189,7 +97,9 @@ namespace BusinessCard
             var angular = NewTechnology("Angular");
 
             var mySql = NewTechnology("MySql");
+
             NewTechnology("WPF (personal usage only)");
+
             NewTechnology("Xamarin (personal usage only)");
 
             NewTechnology("Blazor (personal usage only)");
@@ -514,17 +424,12 @@ namespace BusinessCard
 
             person.Hobbies = new List<string>()
             {
-                "Musician", 
+                "Musician",
                 "Bike Traveller",
                 "Cat Person",
             };
 
             return person;
-        }
-
-        private static JobTitleData EnsureJobTitleCreated(string title, Action<JobTitle> init)
-        {
-            return new JobTitleData() {Name = title};
         }
 
         private static TechnologyData NewTechnology(string title)
