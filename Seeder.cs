@@ -16,11 +16,35 @@ namespace BusinessCard
 {
     public class Seeder
     {
+        public class SeedResult
+        {
+            public Status Status { get; set; }
+            
+            public Exception Exception { get; set; }
+        }
+        
+        public enum Status
+        {
+            NoRun, Failed, Success
+        }
+
+        public static SeedResult Result { get; } = new() {Status = Status.NoRun};
         public static async Task SeedAsync(Ctx context)
         {
-            var dataAsync = FactoryOfMe.Produce();
+            try
+            {
+                var dataAsync = FactoryOfMe.Produce();
+                
+                await new Seeder(context).SeedAsync(dataAsync);
 
-            await new Seeder(context).SeedAsync(dataAsync);
+                Result.Status = Status.Success;
+            }
+            catch (Exception exception)
+            {
+                Result.Status = Status.Failed;
+                Result.Exception = exception;
+            }
+
         }
 
         private async Task SeedAsync(PersonData data)
@@ -239,35 +263,26 @@ namespace BusinessCard
 
                 if (existingTargetItem != null)
                 {
-                    // Update existing target item with source item
                     map?.Invoke(sourceItem, existingTargetItem);
-                    // Update other properties as needed
                 }
                 else
                 {
-                    // Create a new target item using the factory delegate
-                    var newTargetItem = targetItemFactory(sourceItem);
+                    existingTargetItem = targetItemFactory(sourceItem);
 
-                    map?.Invoke(sourceItem, newTargetItem);
+                    map?.Invoke(sourceItem, existingTargetItem);
+                    
+                    existingList?.Add(existingTargetItem);
+                }
 
-                    targets.Add(newTargetItem);
-
-                    existingList?.Add(newTargetItem);
+                if (!targets.Any(s => matchPredicate(sourceItem, s)))
+                {
+                    targets.Add(existingTargetItem);
                 }
             }
-
-            // Remove items from the target list that do not have a corresponding source item
+            
             targets.RemoveAll(t => !sourceItems.Any(s => matchPredicate(s, t)));
-
-
+            
             return targets;
         }
-    }
-
-    public interface IStrategy
-    {
-        TTarget Find<TSource, TTarget>(Func<TSource, TTarget, bool> matchPredicate);
-
-        void Add();
     }
 }

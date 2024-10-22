@@ -7,7 +7,8 @@ const target = env.ASPNETCORE_HTTPS_PORT ? `https://localhost:${env.ASPNETCORE_H
 const context =  [
   "/weatherforecast",
     "/api",
-    "/api/v2"
+    "/api/v2",
+    "/health"
 ];
 
 module.exports = function(app) {

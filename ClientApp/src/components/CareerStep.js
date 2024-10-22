@@ -8,7 +8,7 @@ const CareerStep = ({careerStep}) => {
           <span
               className="job-title">{careerStep.title}</span>, {formatDateToMonthAndYear(careerStep.startDate)}
         <div className="projects">
-            Projects:
+            Assignments:
         </div>
         <ul>
             {careerStep.assignments.map(a =>

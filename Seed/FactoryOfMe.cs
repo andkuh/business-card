@@ -67,7 +67,7 @@ namespace BusinessCard.Seed
 
             var seniorDev = new JobTitleData()
             {
-                Name = "Software Developer", StartDate = new DateTime(2021, 11, 1), EndDate = new DateTime(2023, 4, 12)
+                Name = "Senior Software Developer", StartDate = new DateTime(2021, 11, 1), EndDate = new DateTime(2023, 4, 12)
             };
 
             var html = NewTechnology("HTML");
@@ -95,14 +95,16 @@ namespace BusinessCard.Seed
             var dotnetFramework = NewTechnology(".NET Framework 4.8");
 
             var angular = NewTechnology("Angular");
+            
+            var react = NewTechnology("ReactJS");
 
             var mySql = NewTechnology("MySql");
 
-            NewTechnology("WPF (personal usage only)");
+            var wpf = NewTechnology("WPF (personal usage only)");
 
-            NewTechnology("Xamarin (personal usage only)");
+            var xamarin = NewTechnology("Xamarin (personal usage only)");
 
-            NewTechnology("Blazor (personal usage only)");
+            var blazor = NewTechnology("Blazor (personal usage only)");
 
             var msExcel = NewTechnology("MS Excel");
 
@@ -162,7 +164,7 @@ namespace BusinessCard.Seed
                             Role = "Developer",
                             Technologies = new List<TechnologyData>()
                             {
-                                cSharp, efCore, rabbitMq, msSqlServer, typeScript, angular
+                                cSharp, efCore, rabbitMq, msSqlServer, typeScript, angular, blazor, css, react
                             },
                             Duties = new List<string>()
                             {
@@ -338,9 +340,10 @@ namespace BusinessCard.Seed
                                 "My path to mastering ASP.NET C# coding begins with grasping the fundamentals of the C# language, " +
                                 "exploring the intricacies of the ASP.NET framework, delving into web forms, MVC, and APIs, " +
                                 "honing my skills through hands-on coding challenges and projects, and keeping abreast of the ever-evolving web development landscape.",
-                            Role = "Student", Technologies = new List<TechnologyData>()
+                            Role = "Student",
+                            Technologies = new List<TechnologyData>()
                             {
-                                aspNetCore, efCore, css, html, javaScript, cSharp
+                                aspNetCore, efCore, css, html, javaScript, cSharp, xamarin, wpf
                             },
                             Duties = new List<string>()
                             {
@@ -362,12 +365,12 @@ namespace BusinessCard.Seed
                         {
                             Name = "Software Developer",
                             EndDate = new DateTime(2016, 4, 1),
-                            StartDate = new DateTime(2014, 8, 1)
+                            StartDate = new DateTime(2015, 2, 2)
                         },
                         new()
                         {
                             Name = "Economist",
-                            EndDate = new DateTime(2014, 8, 1),
+                            EndDate = new DateTime(2015, 2, 1),
                             StartDate = new DateTime(2013, 4, 1)
                         }
                     },
@@ -391,12 +394,12 @@ namespace BusinessCard.Seed
                         new()
                         {
                             EndDate = new DateTime(2016, 4, 1),
-                            StartDate = new DateTime(2013, 4, 1),
+                            StartDate = new DateTime(2013, 6, 1),
                             Name = "MS Excel driven invoicing application",
                             Summary = "Application to simplify invoicing",
                             Description =
                                 "Visual Basic for Applications driven Excel files to manage invoicing process",
-                            Role = "Economist / Developer",
+                            Role = "Developer",
                             Technologies =
                                 new List<TechnologyData>
                                 {
@@ -404,6 +407,16 @@ namespace BusinessCard.Seed
                                     vba,
                                     msExcel
                                 }
+                        },
+                        new()
+                        {
+                            EndDate = new DateTime(2015, 2, 1),
+                            StartDate = new DateTime(2013, 4, 1),
+                            Name = "Invoicing business processes",
+                            Description = "Working as economist responsible for logistic company invoicing business processes",
+                            Summary = "Pre-dev era :)",
+                            Role = "Economist",
+                            Technologies = new List<TechnologyData>()
                         }
                     }
                 }
