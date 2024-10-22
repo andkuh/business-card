@@ -20,6 +20,10 @@ variables:
 
 steps:
 
+- script: 'echo $(ftp)'
+- script: 'echo $(username)'
+- script: 'echo $(password)'
+  
 - task: NodeTool@0
   inputs:
     versionSource: 'spec'
