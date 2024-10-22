@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using BusinessCard.People.Records;
 using Router;
 using Router.Data;
@@ -24,7 +25,7 @@ namespace BusinessCard.People.Endpoints.v2
                     person.Location,
                     person.FirstName,
                     person.LastName,
-                    person.YearsOld,
+                    yearsOld = person.Birthday.YearsBetween(),
                     person.Summary,
                     person.Specialization,
                     image = new

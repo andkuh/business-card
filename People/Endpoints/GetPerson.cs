@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using BusinessCard.Infrastructure;
 using BusinessCard.People.Records;
 using Microsoft.AspNetCore.Mvc;
@@ -27,7 +28,7 @@ namespace BusinessCard.People.Endpoints
                 return NotFound();
             }
 
-            var result = new PersonDto(person.Id, person.Location, person.FirstName, person.LastName, person.YearsOld)
+            var result = new PersonDto(person.Id, person.Location, person.FirstName, person.LastName, person.Birthday)
             {
                 Specialization = person.Specialization,
                 Summary = person.Summary,
@@ -54,13 +55,13 @@ namespace BusinessCard.People.Endpoints
 
         public ImageDto Image { get; set; }
 
-        public PersonDto(int id, string location, string firstName, string lastName, int yearsOld)
+        public PersonDto(int id, string location, string firstName, string lastName, DateTime birthday)
         {
             Id = id;
             Location = location;
             FirstName = firstName;
             LastName = lastName;
-            YearsOld = yearsOld;
+            YearsOld = birthday.YearsBetween();
         }
 
         public class ImageDto

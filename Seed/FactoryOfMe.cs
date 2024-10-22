@@ -29,7 +29,7 @@ namespace BusinessCard.Seed
 
             person.FirstName = name;
             person.LastName = lastName;
-            person.YearsOld = (int) (DateTime.UtcNow - new DateTime(1988, 07, 21)).TotalDays / 365;
+            person.Birthday = new DateTime(1988, 07, 21);
             person.Location = "Brest, Belarus";
             person.Specialization = ".Net Developer";
             person.Image.ContentType = "image/png";

@@ -88,7 +88,7 @@ namespace BusinessCard
             person.Location = data.Location;
             person.Summary = data.Summary;
             person.Specialization = data.Specialization;
-            person.YearsOld = data.YearsOld;
+            person.Birthday = data.Birthday;
 
             person.Links = data.Links.Synchronize(person.Links,
                 (contactData, contact) => contactData.Value == contact.Value, contactData => new Link()
@@ -312,6 +312,16 @@ namespace BusinessCard
         {
             return sourceList.Synchronize(targetList, matchPredicate, targetItemFactory, (s, _, t) => map?.Invoke(s, t),
                 existingList);
+        }
+        
+        
+        public static int YearsBetween(this DateTime startDate, DateTime? endDate = null)
+        {
+            var timeSpan = (endDate ?? DateTime.UtcNow) - startDate;
+            
+            var years = (int)Math.Floor((double)timeSpan.Days / 365.25);
+            
+            return years;
         }
     }
 }
