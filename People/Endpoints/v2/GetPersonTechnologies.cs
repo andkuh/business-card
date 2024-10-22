@@ -1,10 +1,10 @@
-using System.Collections.Generic;
 using System.Linq;
 using BusinessCard.Employments.Records;
-using BusinessCard.Technologies.Records;
 using Microsoft.EntityFrameworkCore;
 using Router;
+using Router.Cache;
 using Router.Data;
+using Router.Helpers;
 using Router.Request;
 using Router.Response.Extensions;
 using Router.Validation.Numbers;
@@ -43,6 +43,7 @@ namespace BusinessCard.People.Endpoints.v2
                         .OrderBy(s => s.level).ThenBy(s => s.title)
                         .ToList()
                 )
+                .Cache(cache => cache.As(id => CacheKey.For("person", "technologies", ("id", id))).For(30.Minutes()))
                 .Respond200Ok(items => new {items});
         }
     }

@@ -2,6 +2,7 @@
 using BusinessCard.People.Records;
 using Microsoft.EntityFrameworkCore;
 using Router;
+using Router.Cache;
 using Router.Data;
 using Router.Data.Configuration.Extensions;
 using Router.Data.Extensions;
@@ -28,6 +29,7 @@ namespace BusinessCard.People.Endpoints.v2
                 {
                     items = s.Hobbies.Select(hobby => hobby.Title)
                 })
+                .Cache(cache => cache.As(id => CacheKey.For("person", "hobbies", ("id", id))))
                 .Respond200Ok();
         }
     }
