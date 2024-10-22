@@ -29,11 +29,11 @@ steps:
 - task: DotNetCoreCLI@2
   displayName: Restore
   inputs:
-    command: restore
+    command: 'restore'
     projects: '$(restoreBuildProjects)'
-    vstsFeed: 'f2b5c742-0b81-4c39-90a2-3fe17317d78a/9170686c-f539-468e-b748-5e7e2dff1130'
-    verbosityRestore: Detailed
-    verbosityPack: Detailed
+    feedsToUse: 'select'
+    vstsFeed: 'eafe52e3-fd8f-47c6-8048-f3b46c3ef9e9/cfd6d15a-3352-41cb-9ab6-23962f3d3db1'
+    verbosityRestore: 'Detailed'
 
 - task: DotNetCoreCLI@2
   inputs:
