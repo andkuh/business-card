@@ -6,7 +6,7 @@ import "./Employment.css";
 const Employment = ({employment}) => {
     return (
         <div className="employment">
-            <div>
+            <div className="job-title-header">
                 <h4>{employment.employer.name}</h4>
                 <p>{formatDateToMonthAndYear(employment.startDate)} - {employment.endDate ? formatDateToMonthAndYear(employment.endDate) : 'Now'} </p>
             </div>

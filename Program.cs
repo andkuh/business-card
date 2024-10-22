@@ -16,6 +16,7 @@ using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
 using Router;
 using Router.Configuration;
@@ -38,7 +39,7 @@ builder.Services.AddScoped<IGetEmployments, IGetEmployments.Impl>();
 
 builder.Services.AddApiExpress(s =>
 {
-    s.AddEndpoints(a => a.UseJson<CamelCasePropertyNamesContractResolver>())
+    s.AddEndpoints(a => a.UseJson<CamelCasePropertyNamesContractResolver>(j => j.Use<StringEnumConverter>()))
         .AddErrorHandling(err => err.Add<ErrorResponse, Errors>())
         .AddData<Data>
         (

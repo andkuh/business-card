@@ -23,6 +23,8 @@ namespace BusinessCard.Employments.Records
         public DateTime? EndDate { get; set; }
 
         public virtual ICollection<Assignment> Assignments { get; set; } = new List<Assignment>();
+        
+        public EmploymentType Type { get; set; }
 
     }
 }

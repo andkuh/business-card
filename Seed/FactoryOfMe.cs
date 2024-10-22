@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using BusinessCard.Employments.Records;
 
 namespace BusinessCard.Seed
 {
@@ -100,11 +101,11 @@ namespace BusinessCard.Seed
 
             var mySql = NewTechnology("MySql");
 
-            var wpf = NewTechnology("WPF (personal usage only)");
+            var wpf = NewTechnology("WPF");
 
-            var xamarin = NewTechnology("Xamarin (personal usage only)");
+            var xamarin = NewTechnology("Xamarin");
 
-            var blazor = NewTechnology("Blazor (personal usage only)");
+            var blazor = NewTechnology("Blazor");
 
             var msExcel = NewTechnology("MS Excel");
 
@@ -113,8 +114,7 @@ namespace BusinessCard.Seed
             var msAccess = NewTechnology("MS ACCESS");
 
             var winForms = NewTechnology("Windows Forms");
-
-
+            
             AssignmentData baAssignment = new()
             {
                 Name = "BA / PM support of development",
@@ -144,6 +144,7 @@ namespace BusinessCard.Seed
                 {
                     StartDate = new DateTime(2023, 4, 13),
                     Employer = sabbatical,
+                    Type = EmploymentType.Pet,
                     Assignments = new List<AssignmentData>()
                     {
                         new()
@@ -316,8 +317,10 @@ namespace BusinessCard.Seed
                 },
                 new()
                 {
-                    Employer = new EmployerData() {Name = "Self-Education"},
+                    Employer = new EmployerData() {Name = "Career break (Self-Education)"},
+                    Type = EmploymentType.Education,
                     StartDate = new DateTime(2016, 4, 1),
+                    EndDate = new DateTime(2017, 5, 1),
                     JobTitles = new List<JobTitleData>()
                     {
                         new()
@@ -333,7 +336,7 @@ namespace BusinessCard.Seed
                         {
                             StartDate = new DateTime(2016, 4, 1),
                             EndDate = new DateTime(2018, 4, 1),
-                            Name = "Learning ASP.NET C# Coding",
+                            Name = "Learning ASP.NET C# Development",
                             Description =
                                 "Follow my experience as I delve into the world of ASP.NET C# coding, a framework essential for web application development.",
                             Summary =
@@ -344,12 +347,6 @@ namespace BusinessCard.Seed
                             Technologies = new List<TechnologyData>()
                             {
                                 aspNetCore, efCore, css, html, javaScript, cSharp, xamarin, wpf
-                            },
-                            Duties = new List<string>()
-                            {
-                                "Learning",
-                                "Learning",
-                                "Learning once again"
                             }
                         }
                     },

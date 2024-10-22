@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using BusinessCard.Employments.Records;
 
 namespace BusinessCard.Seed
 {
@@ -10,5 +11,6 @@ namespace BusinessCard.Seed
         public IEnumerable<AssignmentData> Assignments { get; set; }
         public IEnumerable<JobTitleData> JobTitles { get; set; }
         public DateTime? EndDate { get; set; }
+        public EmploymentType Type { get; set; }
     }
 }

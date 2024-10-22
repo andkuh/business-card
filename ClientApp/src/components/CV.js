@@ -30,8 +30,9 @@ export class CV extends Component {
 
                 this.setState({employments: data.items});
             });
+        
 
-        fetch("/api/v2/technologies")
+        fetch("/api/v2/people/" + this.personId + "/technologies")
             .then(async resp => {
                 const data = await resp.json();
 
@@ -81,6 +82,9 @@ export class CV extends Component {
                     {this.state.technologies ? this.state.technologies.map(s =>
                         <li key={s.title}>
                             {s.title}
+                            <span className="assignment-summary">
+                                ({s.level})
+                            </span>
                         </li>
                     ) : this.loading()}
                 </ul>

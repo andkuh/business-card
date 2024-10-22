@@ -22,6 +22,8 @@ namespace BusinessCard.Technologies.Endpoints
         {
             var technologies =
                 await _context.Technologies
+                    .Include(s => s.Assignments)
+                    .ThenInclude(s => s.Employment)
                     .OrderBy(s => s.Title).Select(s => new {s.Title})
                     .ToListAsync();
 

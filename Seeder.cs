@@ -133,6 +133,7 @@ namespace BusinessCard
                 {
                     employment.EndDate = employmentData.EndDate;
                     employment.StartDate = employmentData.StartDate;
+                    employment.Type = employmentData.Type;
                     employment.JobTitles = employmentData.JobTitles.Synchronize
                     (
                         targetList: employment.JobTitles,
