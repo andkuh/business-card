@@ -115,6 +115,14 @@ namespace BusinessCard.Seed
 
             var winForms = NewTechnology("Windows Forms");
             
+            var dotnet6 = NewTechnology(".NET 6");
+            
+            var dotnet5 = NewTechnology(".NET 5");
+            
+            var dotnet31 = NewTechnology(".NET 3.1");
+
+            var microservices = NewTechnology("Microservices");
+            
             AssignmentData baAssignment = new()
             {
                 Name = "BA / PM support of development",
@@ -165,7 +173,7 @@ namespace BusinessCard.Seed
                             Role = "Developer",
                             Technologies = new List<TechnologyData>()
                             {
-                                cSharp, efCore, rabbitMq, msSqlServer, typeScript, angular, blazor, css, react
+                                cSharp, efCore, rabbitMq, msSqlServer, typeScript, angular, blazor, css, react, dotnet5, dotnet6, microservices
                             },
                             Duties = new List<string>()
                             {
@@ -224,7 +232,8 @@ namespace BusinessCard.Seed
                                 css,
                                 rabbitMq,
                                 aspNetCore,
-                                msSqlServer
+                                msSqlServer,
+                                dotnet31, microservices
                             }
                         },
                         new()
@@ -250,7 +259,8 @@ namespace BusinessCard.Seed
                                 css,
                                 html,
                                 efCore,
-                                typeScript
+                                typeScript, 
+                                dotnet31
                             }
                         },
                         new()
@@ -267,7 +277,7 @@ namespace BusinessCard.Seed
                             },
                             Technologies = new List<TechnologyData>()
                             {
-                                aspNetCore, cSharp, efCore, msSqlServer, dotnetFramework
+                                aspNetCore, cSharp, efCore, msSqlServer, dotnetFramework, dotnet31, microservices
                             }
                         },
                         new()
@@ -296,7 +306,10 @@ namespace BusinessCard.Seed
                                 efCore,
                                 msSqlServer,
                                 typeScript,
-                                kendoUi
+                                kendoUi, 
+                                dotnet5, 
+                                dotnet6,
+                                microservices
                             }
                         }
                     }
