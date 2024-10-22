@@ -13,9 +13,9 @@ variables:
   solution: '**/*.sln'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
-  ftp: $(FTP_SERVER_URL)
-  username: $(FTP_USERNAME_URL)
-  password: $(FTP_PASSWORD_URL)
+  ftp: $(FTP_SERVER)
+  username: $(FTP_USERNAME)
+  password: $(FTP_PASSWORD)
   restoreBuildProjects: '**/*.csproj'
 
 steps:
