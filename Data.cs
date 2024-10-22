@@ -10,7 +10,7 @@ namespace BusinessCard
         public void Configure(IDataScopeBuilder builder)
         {
             builder.With(s => s.Record<Person>()
-                .AggregateAs(a => a.Include(i => i.Image)));
+                .AggregateAs(a => a.Include(i => i.Image).Include(i => i.Links).AsSplitQuery()));
 
             builder.With(s => s.Record<Technology>());
         }

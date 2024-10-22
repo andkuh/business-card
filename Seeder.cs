@@ -11,6 +11,7 @@ using BusinessCard.People.Records;
 using BusinessCard.Seed;
 using BusinessCard.Technologies.Records;
 using Microsoft.EntityFrameworkCore;
+using Link = BusinessCard.People.Records.Link;
 
 namespace BusinessCard
 {
@@ -19,22 +20,25 @@ namespace BusinessCard
         public class SeedResult
         {
             public Status Status { get; set; }
-            
+
             public Exception Exception { get; set; }
         }
-        
+
         public enum Status
         {
-            NoRun, Failed, Success
+            NoRun,
+            Failed,
+            Success
         }
 
         public static SeedResult Result { get; } = new() {Status = Status.NoRun};
+
         public static async Task SeedAsync(Ctx context)
         {
             try
             {
                 var dataAsync = FactoryOfMe.Produce();
-                
+
                 await new Seeder(context).SeedAsync(dataAsync);
 
                 Result.Status = Status.Success;
@@ -44,7 +48,6 @@ namespace BusinessCard
                 Result.Status = Status.Failed;
                 Result.Exception = exception;
             }
-
         }
 
         private async Task SeedAsync(PersonData data)
@@ -64,6 +67,7 @@ namespace BusinessCard
                 .ThenInclude(s => s.JobTitles)
                 .Include(s => s.Hobbies)
                 .Include(s => s.EducationSteps)
+                .Include(s => s.Links)
                 .AsSplitQuery()
                 .FirstOrDefaultAsync(s =>
                     s.FirstName.Equals(data.FirstName) && s.LastName.Equals(data.LastName));
@@ -85,6 +89,16 @@ namespace BusinessCard
             person.Summary = data.Summary;
             person.Specialization = data.Specialization;
             person.YearsOld = data.YearsOld;
+
+            person.Links = data.Links.Synchronize(person.Links,
+                (contactData, contact) => contactData.Value == contact.Value, contactData => new Link()
+                {
+                    Value = contactData.Value
+                }, (contactData, index, contact) =>
+                {
+                    contact.Type = contactData.Type;
+                    contact.Ordinal = index;
+                });
 
             person.Hobbies = data.Hobbies
                 .Distinct()
@@ -165,7 +179,8 @@ namespace BusinessCard
                                 }, existingList: technologies);
 
                             assignment.Link = assignmentData.Link != null
-                                ? MapLink(assignmentData.Link, assignment.Link ?? new Link())
+                                ? MapLink(assignmentData.Link,
+                                    assignment.Link ?? new Employments.Records.AssignmentLink())
                                 : null;
 
                             assignment.Duties = assignmentData
@@ -176,7 +191,8 @@ namespace BusinessCard
                 }
             );
 
-            Link MapLink(LinkData linkData, Link link)
+            Employments.Records.AssignmentLink MapLink(AssignmentLinkData linkData,
+                Employments.Records.AssignmentLink link)
             {
                 link.Address = linkData.Address;
                 link.Caption = linkData.Caption;
@@ -249,7 +265,7 @@ namespace BusinessCard
             this IEnumerable<TSource> sourceList,
             IEnumerable<TTarget> targetList,
             Func<TSource, TTarget, bool> matchPredicate,
-            Func<TSource, TTarget> targetItemFactory, Action<TSource, TTarget>? map = null,
+            Func<TSource, TTarget> targetItemFactory, Action<TSource, int, TTarget>? map,
             List<TTarget>? existingList = null)
         {
             var sourceItems = sourceList?.ToList() ?? new List<TSource>();
@@ -258,20 +274,21 @@ namespace BusinessCard
 
             IEnumerable<TTarget> pool = existingList ?? targets;
 
-            foreach (var sourceItem in sourceItems)
+            for (var index = 0; index < sourceItems.Count; index++)
             {
+                var sourceItem = sourceItems[index];
                 var existingTargetItem = pool.FirstOrDefault(t => matchPredicate(sourceItem, t));
 
                 if (existingTargetItem != null)
                 {
-                    map?.Invoke(sourceItem, existingTargetItem);
+                    map?.Invoke(sourceItem, index, existingTargetItem);
                 }
                 else
                 {
                     existingTargetItem = targetItemFactory(sourceItem);
 
-                    map?.Invoke(sourceItem, existingTargetItem);
-                    
+                    map?.Invoke(sourceItem, index, existingTargetItem);
+
                     existingList?.Add(existingTargetItem);
                 }
 
@@ -280,10 +297,21 @@ namespace BusinessCard
                     targets.Add(existingTargetItem);
                 }
             }
-            
+
             targets.RemoveAll(t => !sourceItems.Any(s => matchPredicate(s, t)));
-            
+
             return targets;
+        }
+
+        public static List<TTarget> Synchronize<TSource, TTarget>(
+            this IEnumerable<TSource> sourceList,
+            IEnumerable<TTarget> targetList,
+            Func<TSource, TTarget, bool> matchPredicate,
+            Func<TSource, TTarget> targetItemFactory, Action<TSource, TTarget>? map = null,
+            List<TTarget>? existingList = null)
+        {
+            return sourceList.Synchronize(targetList, matchPredicate, targetItemFactory, (s, _, t) => map?.Invoke(s, t),
+                existingList);
         }
     }
 }

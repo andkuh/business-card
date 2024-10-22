@@ -1,8 +1,10 @@
+using BusinessCard.People.Records;
+
 namespace BusinessCard.Seed
 {
     public class LinkData
     {
-        public string Address { get; set; }
-        public string Caption { get; set; }
+        public string Value { get; set; }
+        public LinkType Type { get; set; }
     }
 }

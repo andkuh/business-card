@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using BusinessCard.Employments.Records;
+using BusinessCard.People.Records;
 
 namespace BusinessCard.Seed
 {
@@ -68,7 +69,8 @@ namespace BusinessCard.Seed
 
             var seniorDev = new JobTitleData()
             {
-                Name = "Senior Software Developer", StartDate = new DateTime(2021, 11, 1), EndDate = new DateTime(2023, 4, 12)
+                Name = "Senior Software Developer", StartDate = new DateTime(2021, 11, 1),
+                EndDate = new DateTime(2023, 4, 12)
             };
 
             var html = NewTechnology("HTML");
@@ -96,7 +98,7 @@ namespace BusinessCard.Seed
             var dotnetFramework = NewTechnology(".NET Framework 4.8");
 
             var angular = NewTechnology("Angular");
-            
+
             var react = NewTechnology("ReactJS");
 
             var mySql = NewTechnology("MySql");
@@ -114,15 +116,15 @@ namespace BusinessCard.Seed
             var msAccess = NewTechnology("MS ACCESS");
 
             var winForms = NewTechnology("Windows Forms");
-            
+
             var dotnet6 = NewTechnology(".NET 6");
-            
+
             var dotnet5 = NewTechnology(".NET 5");
-            
+
             var dotnet31 = NewTechnology(".NET 3.1");
 
             var microservices = NewTechnology("Microservices");
-            
+
             AssignmentData baAssignment = new()
             {
                 Name = "BA / PM support of development",
@@ -163,7 +165,7 @@ namespace BusinessCard.Seed
                             Description =
                                 "Nuget package providing alternative, fast and easy approach to develop web api. This application uses a little piece of this lib, see the link below the source code",
 
-                            Link = new LinkData()
+                            Link = new AssignmentLinkData()
                             {
                                 Address = "https://github.com/andkuh/business-card",
                                 Caption =
@@ -173,7 +175,8 @@ namespace BusinessCard.Seed
                             Role = "Developer",
                             Technologies = new List<TechnologyData>()
                             {
-                                cSharp, efCore, rabbitMq, msSqlServer, typeScript, angular, blazor, css, react, dotnet5, dotnet6, microservices
+                                cSharp, efCore, rabbitMq, msSqlServer, typeScript, angular, blazor, css, react, dotnet5,
+                                dotnet6, microservices
                             },
                             Duties = new List<string>()
                             {
@@ -259,7 +262,7 @@ namespace BusinessCard.Seed
                                 css,
                                 html,
                                 efCore,
-                                typeScript, 
+                                typeScript,
                                 dotnet31
                             }
                         },
@@ -306,8 +309,8 @@ namespace BusinessCard.Seed
                                 efCore,
                                 msSqlServer,
                                 typeScript,
-                                kendoUi, 
-                                dotnet5, 
+                                kendoUi,
+                                dotnet5,
                                 dotnet6,
                                 microservices
                             }
@@ -423,7 +426,8 @@ namespace BusinessCard.Seed
                             EndDate = new DateTime(2015, 2, 1),
                             StartDate = new DateTime(2013, 4, 1),
                             Name = "Invoicing business processes",
-                            Description = "Working as economist responsible for logistic company invoicing business processes",
+                            Description =
+                                "Working as economist responsible for logistic company invoicing business processes",
                             Summary = "Pre-dev era :)",
                             Role = "Economist",
                             Technologies = new List<TechnologyData>()
@@ -450,6 +454,28 @@ namespace BusinessCard.Seed
                 "Musician",
                 "Bike Traveller",
                 "Cat Person",
+            };
+
+
+            person.Links = new List<LinkData>()
+            {
+                new LinkData()
+                {
+                    Type = LinkType.LinkedIn,
+                    Value = "https://www.linkedin.com/in/andrei-kuharchuk-364672127/",
+                },
+                
+                new LinkData()
+                {
+                    Type = LinkType.Email,
+                    Value = "andrewkuharchuk@gmail.com"
+                },
+
+                new LinkData()
+                {
+                    Type = LinkType.GitHub,
+                    Value = "https://github.com/andkuh"
+                }
             };
 
             return person;

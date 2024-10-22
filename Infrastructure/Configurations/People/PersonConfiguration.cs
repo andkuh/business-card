@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace BusinessCard.Infrastructure.Configurations.People
 {
-    public class PersonConfiguration: IEntityTypeConfiguration<Person>
+    public class PersonConfiguration : IEntityTypeConfiguration<Person>
     {
         public void Configure(EntityTypeBuilder<Person> builder)
         {
@@ -23,6 +23,16 @@ namespace BusinessCard.Infrastructure.Configurations.People
             builder.Property(s => s.LastName).HasMaxLength(256);
 
             builder.OwnsOne(s => s.Image);
+
+            builder.HasMany(s => s.Links).WithOne(s => s.Person).OnDelete(DeleteBehavior.Cascade);
+        }
+    }
+
+    public class LinkConfiguration : IEntityTypeConfiguration<Link>
+    {
+        public void Configure(EntityTypeBuilder<Link> builder)
+        {
+            builder.ToTable("Links");
         }
     }
 }

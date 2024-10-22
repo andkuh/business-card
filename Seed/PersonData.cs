@@ -14,5 +14,6 @@ namespace BusinessCard.Seed
         public IEnumerable<EmploymentData> Employments { get; set; }
         public IEnumerable<EducationStepData> EducationSteps { get; set; }
         public IEnumerable<string> Hobbies { get; set; }
+        public IEnumerable<LinkData> Links { get; set; }
     }
 }

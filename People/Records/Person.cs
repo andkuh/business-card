@@ -23,5 +23,7 @@ namespace BusinessCard.People.Records
         public virtual PersonImage Image { get; set; }
         public virtual ICollection<EducationStep> EducationSteps { get; set; }
         public virtual ICollection<Hobby> Hobbies { get; set; }
+
+        public virtual ICollection<Link> Links { get; set; } = new List<Link>();
     }
 }

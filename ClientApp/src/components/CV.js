@@ -12,7 +12,7 @@ export class CV extends Component {
 
         this.personId = 1; // Oh-oh, naughty magic numbers to get Andrei from backend :)
 
-        this.state = {person: null, employments: null, technologies: null, hobbies: null, education: null};
+        this.state = {person: null, employments: null, technologies: null, hobbies: null, education: null, links: null};
     }
 
     componentDidMount() {
@@ -50,6 +50,12 @@ export class CV extends Component {
                 const data = await resp.json();
                 this.setState({hobbies: data.items});
             })
+
+        fetch("/api/v2/people/" + this.personId + "/links")
+            .then(async resp => {
+                const data = await resp.json();
+                this.setState({links: data.items});
+            })
     }
 
     loading() {
@@ -59,7 +65,7 @@ export class CV extends Component {
     render() {
         return <div>
             <header className="section-header">
-                {this.state.person ? <Person person={this.state.person}/> : this.loading()}
+                {this.state.person ? <Person person={this.state.person} links={this.state.links}/> : this.loading()}
             </header>
 
             <section className="section">
