@@ -13,9 +13,9 @@ variables:
   solution: '**/*.sln'
   buildPlatform: 'Any CPU'
   buildConfiguration: 'Release'
-  ftp: $(FTP_SERVER)
-  username: $(FTP_USERNAME)
-  password: $(FTP_PASSWORD)
+  ftp: '$(FTP_SERVER)'
+  username: '$(FTP_USERNAME)'
+  password: '$(FTP_PASSWORD)'
   restoreBuildProjects: '**/*.csproj'
 
 steps:
@@ -45,7 +45,7 @@ steps:
 - task: FtpUpload@2
   inputs:
     credentialsOption: 'inputs'
-    serverUrl: $(ftp)
+    serverUrl: '$(ftp)'
     username: '$(username)'
     password: '$(password)'
     rootDirectory: '$(Build.ArtifactStagingDirectory)'
