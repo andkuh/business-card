@@ -13,14 +13,14 @@ As said this application is built using DotExpress library.
 
 If you're curious about what my DotExpress is, here are some examples. In short, the main idea is to have alternative to classic controllers, allowing to implement Web Api endpoints easily and extremely fast without any ceremonies as complex arhitectural patterns ofter do. Based on builder pattern, it brings it's advantages to the API development: considered design of builder elements literally suggests to developer how to use it correctly and combined with human-readable method naming makes development more storytelling alike rather that coding and even non-technical mates may become able to understand what particular endpoint does. 
 
-You could think that it looks Microsoft's MinimalApi alike, but it is not, and it is not built based on it. The idea born before MinimalApi was released, so it went in it's own way. 
+You could think that it looks Microsoft's MinimalApi alike, but it is not, and it is not built based on it. The idea was born before MinimalApi was released, so it went in it's own way. 
 It uses builder pattern to configure endpoints, which after a bit of magic under the hood ends up with adult best-practice dependency registrations in DI container, so each endpoint path becomes assosiated with particular ```IEndpointService<TEndpoint>``` implementation which may resolve pretty complex tree of generic objects from ```IServiceProvider``` to handle the http request: to read request, process it and make a response.
 DotExpress allows to extend it's functionality: using Scrutor library allowing to register decorators for services opens a huge field for developing extensions, and things like caching, event broadcasting are implemented based on it.
 It may sound odd, but you don't event need Dto objects to describe your contracts, you may use anonymous objects without need to implement classes spread among many .cs files. Don't be afraid: separate package is able to document the api and give to you and your users beloved Swagger / OpenApi specification.
 
 The library is not in open source currently, it is only supposed to be, some actions still required for it. Anyway no plans for any promotion or commercial distribution. I'm doing it by myself and for myself, so feel free to like it or dislike it :)
 
-So in the end it's one more non-silver bullet in a world of dev, there is still reasonable question if this approach suitable fot complex applications and systems. Probably complex cases may require more complex arhitectural patterns. But anyway this repo is example of how covered my needs in practice.
+So in the end it's one more non-silver bullet in a world of dev, there is still reasonable question if this approach suitable fot complex applications and systems. Probably complex cases may require more complex arhitectural patterns. But anyway this repo is example of how it covered my needs in practice.
 
 
 
