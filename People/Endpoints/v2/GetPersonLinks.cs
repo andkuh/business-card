@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Router;
 using Router.Cache;
 using Router.Data;
+using Router.Data.Configuration.Extensions;
 using Router.Helpers;
 using Router.Request;
 using Router.Response.Extensions;
@@ -16,19 +17,25 @@ namespace BusinessCard.People.Endpoints.v2
         public void Define(IEndpointBuilder<GetPersonLinks> configure)
         {
             configure.Get("/api/v2/people/{id}/links")
-                .As(data => data.FromUri<int>(a => a.IsAboveZero()))
+                .As(data => new
+                {
+                    id = data.FromUri<int>(id => id.IsAboveZero())
+                })
                 .UseData()
                 .SetOf<Person>()
-                .Select((queryable, request) =>
+                .Select
+                (
+                    selection: (queryable, request) =>
+                    {
+                        return queryable
+                            .Include(s => s.Links)
+                            .FirstOrDefaultAsync(s => s.Id == request.id);
+                    },
+                    configure: options => options.ThrowNotFoundIfNothing()
+                )
+                .MapResult(person => new
                 {
-                    return queryable.Include(s => s.Links)
-                        .Where(s => s.Id == request)
-                        .SelectMany(s => s.Links)
-                        .ToListAsync();
-                })
-                .MapResult(s => new
-                {
-                    items = s.OrderBy(i => i.Ordinal).Select(l => new
+                    items = person!.Links.OrderBy(i => i.Ordinal).Select(l => new
                     {
                         l.Type, l.Value
                     })

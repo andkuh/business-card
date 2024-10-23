@@ -17,7 +17,7 @@ namespace BusinessCard.People.Endpoints.v2
         {
             configure
                 .Get("/api/v2/people/{id}/technologies")
-                .As(data => data.FromUri<int>(a => a.IsAboveZero()))
+                .As(data => data.FromUri<int>(v => v.IsAboveZero()))
                 .UseData()
                 .SetOf<Assignment>()
                 .Select
@@ -44,7 +44,11 @@ namespace BusinessCard.People.Endpoints.v2
                         .OrderBy(s => s.title)
                         .ToList()
                 )
-                .Cache(cache => cache.As(id => CacheKey.For("person", "technologies", ("id", id))).For(30.Minutes()))
+                .Cache(cache =>
+                {
+                    cache.As(id => CacheKey.For("person", "technologies", ("id", id)))
+                        .For(30.Minutes());
+                })
                 .Respond200Ok(items => new {items});
         }
     }
