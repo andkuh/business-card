@@ -30,13 +30,24 @@ export class CV extends Component {
 
                 this.setState({employments: data.items});
             });
-        
+
 
         fetch("/api/v2/people/" + this.personId + "/technologies")
             .then(async resp => {
                 const data = await resp.json();
 
-                this.setState({technologies: data.items})
+                const items = data.items
+                    .map
+                    (item =>
+                        (
+                            {
+                                title: item.title,
+                                levels: item.levels.includes('Commercial') ? [] : item.levels.filter(s => s !== 'Commercial')
+                            }
+                        )
+                    );
+
+                this.setState({technologies: items})
             });
 
         fetch("/api/v2/people/" + this.personId + "/education")
@@ -88,9 +99,16 @@ export class CV extends Component {
                     {this.state.technologies ? this.state.technologies.map(s =>
                         <li key={s.title}>
                             {s.title}
-                            <span className="assignment-summary">
-                                ({s.level})
-                            </span>
+
+                            {s.levels?.length > 0 &&
+                            (<span className="assignment-summary">
+                                                ({s.levels.map((tech, i) => [
+                                                    i > 0 && ", ",
+                                                    <span>{tech}</span>
+                                                ])} Only) 
+                            </span>)
+                            }
+
                         </li>
                     ) : this.loading()}
                 </ul>

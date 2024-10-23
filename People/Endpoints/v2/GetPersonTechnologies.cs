@@ -15,7 +15,8 @@ namespace BusinessCard.People.Endpoints.v2
     {
         public void Define(IEndpointBuilder<GetPersonTechnologies> configure)
         {
-            configure.Get("/api/v2/people/{id}/technologies")
+            configure
+                .Get("/api/v2/people/{id}/technologies")
                 .As(data => data.FromUri<int>(a => a.IsAboveZero()))
                 .UseData()
                 .SetOf<Assignment>()
@@ -38,9 +39,9 @@ namespace BusinessCard.People.Endpoints.v2
                         .GroupBy(s => s.technology.Title, s => s.Type, (title, types) => new
                         {
                             title,
-                            level = types.Distinct().Min()
+                            levels = types.Distinct()
                         })
-                        .OrderBy(s => s.level).ThenBy(s => s.title)
+                        .OrderBy(s => s.title)
                         .ToList()
                 )
                 .Cache(cache => cache.As(id => CacheKey.For("person", "technologies", ("id", id))).For(30.Minutes()))
