@@ -169,7 +169,7 @@ namespace BusinessCard.Seed
                             {
                                 Address = "https://github.com/andkuh/business-card",
                                 Caption =
-                                    "This page is implemented using that package along with classic controllers, see details",
+                                    "This page is implemented using that package along with classic controllers, see details on github",
                             },
                             Summary = "Router library",
                             Role = "Developer",
@@ -182,6 +182,25 @@ namespace BusinessCard.Seed
                             {
                                 "Features Design and Development",
                                 "Unit testing",
+                            }
+                        },
+                        new()
+                        {
+                            StartDate = new DateTime(2024, 10, 14),
+                            EndDate = new DateTime(2024, 10, 24),
+                            Name = "Business card (This application)",
+                            Technologies = new List<TechnologyData>()
+                            {
+                                cSharp, aspNetCore, react, javaScript,
+                            },
+                            Role = "Tsar :)",
+                            Description =
+                                "It appeared not very fun to create CV pdf by hands, so I created this application and delegated that to it",
+                            Summary = "Business card",
+                            Link = new AssignmentLinkData()
+                            {
+                                Caption = "Source code is here on github",
+                                Address = "https://github.com/andkuh/business-card"
                             }
                         }
                     },
@@ -464,7 +483,7 @@ namespace BusinessCard.Seed
                     Type = LinkType.LinkedIn,
                     Value = "https://www.linkedin.com/in/andrei-kuharchuk-364672127/",
                 },
-                
+
                 new LinkData()
                 {
                     Type = LinkType.Email,
