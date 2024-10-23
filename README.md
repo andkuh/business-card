@@ -5,7 +5,7 @@ It appeared not very fun to compose my CV by hands, so I created this little rep
 - trained a bit my React skills
 - tried in practice my pet DotExpress (or Router, not sure for naming currently) library 
 - demostrated a very basic example of how it can be used.
-- and.. cherry on a top - CV itself in online. it is not possible to export it to pdf currently, but browser's 'Print..' feature is still able to do it for you.
+- and.. cherry on a top - CV itself in [online](https://andrei-kukharchuk.tech/). it is not possible to export it to pdf currently, but browser's 'Print..' feature is still able to do it for you.
 
 ## Examples
 
