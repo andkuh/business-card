@@ -119,4 +119,33 @@ public class GetPersonTechnologies : IEndpoint<GetPersonTechnologies>
         }
     }
 ```
-To be appended..
+
+Here is example of using service 
+
+```CSharp
+    public class GetEmployments : IEndpoint<GetEmployments>
+    {
+        public void Define(IEndpointBuilder<GetEmployments> configure)
+        {
+            configure.Get("/api/v2/people/{id}/employments")
+                .As(data => data.FromUri<int>(a => a.IsAboveZero()))
+                .Serve() // configure service to use
+                .Into<IEnumerable<Model>>()
+                .With<IGetEmployments>() // IGetEmployment implement IService<int, IEnumerable<Model>>
+                .Map
+                (
+                    map => map.Using<IModelToDtoMapper>() // configure to use mapper not implementing native IMapper<TIn, TOut> interface
+                        .Do((data, mapper) => data.Result.Select(mapper.Map)) // configures how to actually call it
+                )
+                .Respond200Ok(items => new {items});
+        }
+    }
+```
+This is actually basic approach and previous ```.UseData().SetOF<T>().Select()``` does something like following under the hood:
+```CSharp
+.Serve()
+.Into<IEnumerable<Assignment>>()
+.With<ISelectService<GetPersonTechnologies, int, Assignment>> // implementing IService<int, IEnumerable<Assignment>>
+```
+
+to be appended..
