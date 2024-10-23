@@ -3,6 +3,7 @@ using System;
 using BusinessCard.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BusinessCard.Migrations
 {
     [DbContext(typeof(Ctx))]
-    partial class CtxModelSnapshot : ModelSnapshot
+    [Migration("20241022202420_AddEmploymentType")]
+    partial class AddEmploymentType
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "6.0.0");
@@ -222,40 +224,11 @@ namespace BusinessCard.Migrations
                     b.ToTable("Hobbies", (string)null);
                 });
 
-            modelBuilder.Entity("BusinessCard.People.Records.Link", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("Ordinal")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("PersonId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("Type")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Value")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("PersonId");
-
-                    b.ToTable("Links", (string)null);
-                });
-
             modelBuilder.Entity("BusinessCard.People.Records.Person", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
-
-                    b.Property<DateTime>("Birthday")
-                        .HasColumnType("TEXT");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
@@ -281,6 +254,9 @@ namespace BusinessCard.Migrations
                         .IsRequired()
                         .HasMaxLength(2048)
                         .HasColumnType("TEXT");
+
+                    b.Property<int>("YearsOld")
+                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
@@ -326,7 +302,7 @@ namespace BusinessCard.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.OwnsOne("BusinessCard.Employments.Records.AssignmentLink", "Link", b1 =>
+                    b.OwnsOne("BusinessCard.Employments.Records.Link", "Link", b1 =>
                         {
                             b1.Property<int>("AssignmentId")
                                 .HasColumnType("INTEGER");
@@ -404,17 +380,6 @@ namespace BusinessCard.Migrations
                         .HasForeignKey("PersonId");
                 });
 
-            modelBuilder.Entity("BusinessCard.People.Records.Link", b =>
-                {
-                    b.HasOne("BusinessCard.People.Records.Person", "Person")
-                        .WithMany("Links")
-                        .HasForeignKey("PersonId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Person");
-                });
-
             modelBuilder.Entity("BusinessCard.People.Records.Person", b =>
                 {
                     b.OwnsOne("BusinessCard.People.Records.PersonImage", "Image", b1 =>
@@ -466,8 +431,6 @@ namespace BusinessCard.Migrations
                     b.Navigation("Employments");
 
                     b.Navigation("Hobbies");
-
-                    b.Navigation("Links");
                 });
 #pragma warning restore 612, 618
         }

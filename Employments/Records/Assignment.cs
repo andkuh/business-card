@@ -23,10 +23,10 @@ namespace BusinessCard.Employments.Records
         public string Summary { get; set; }
         public virtual ICollection<Technology> Technologies { get; set; } = new List<Technology>();
 
-        public virtual Link? Link { get; set; }
+        public virtual AssignmentLink? Link { get; set; }
     }
 
-    public class Link
+    public class AssignmentLink
     {
         public string Address { get; set; }
 

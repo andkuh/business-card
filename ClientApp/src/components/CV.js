@@ -12,7 +12,7 @@ export class CV extends Component {
 
         this.personId = 1; // Oh-oh, naughty magic numbers to get Andrei from backend :)
 
-        this.state = {person: null, employments: null, technologies: null, hobbies: null, education: null};
+        this.state = {person: null, employments: null, technologies: null, hobbies: null, education: null, links: null};
     }
 
     componentDidMount() {
@@ -31,11 +31,23 @@ export class CV extends Component {
                 this.setState({employments: data.items});
             });
 
-        fetch("/api/v2/technologies")
+
+        fetch("/api/v2/people/" + this.personId + "/technologies")
             .then(async resp => {
                 const data = await resp.json();
 
-                this.setState({technologies: data.items})
+                const items = data.items
+                    .map
+                    (item =>
+                        (
+                            {
+                                title: item.title,
+                                levels: item.levels.includes('Commercial') ? [] : item.levels.filter(s => s !== 'Commercial')
+                            }
+                        )
+                    );
+
+                this.setState({technologies: items})
             });
 
         fetch("/api/v2/people/" + this.personId + "/education")
@@ -49,6 +61,12 @@ export class CV extends Component {
                 const data = await resp.json();
                 this.setState({hobbies: data.items});
             })
+
+        fetch("/api/v2/people/" + this.personId + "/links")
+            .then(async resp => {
+                const data = await resp.json();
+                this.setState({links: data.items});
+            })
     }
 
     loading() {
@@ -58,7 +76,7 @@ export class CV extends Component {
     render() {
         return <div>
             <header className="section-header">
-                {this.state.person ? <Person person={this.state.person}/> : this.loading()}
+                {this.state.person ? <Person person={this.state.person} links={this.state.links}/> : this.loading()}
             </header>
 
             <section className="section">
@@ -81,6 +99,16 @@ export class CV extends Component {
                     {this.state.technologies ? this.state.technologies.map(s =>
                         <li key={s.title}>
                             {s.title}
+
+                            {s.levels?.length > 0 &&
+                            (<span className="assignment-summary">
+                                                ({s.levels.map((tech, i) => [
+                                                    i > 0 && ", ",
+                                                    <span>{tech}</span>
+                                                ])} Only) 
+                            </span>)
+                            }
+
                         </li>
                     ) : this.loading()}
                 </ul>

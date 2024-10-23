@@ -9,7 +9,7 @@ namespace BusinessCard.Seed
         public string Name { get; set; }
         public DateTime EndDate { get; set; }
         public string Description { get; set; }
-        public LinkData? Link { get; set; }
+        public AssignmentLinkData? Link { get; set; }
         public string Summary { get; set; }
         public string Role { get; set; }
         public IEnumerable<TechnologyData> Technologies { get; set; }

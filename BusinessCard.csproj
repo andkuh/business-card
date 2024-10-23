@@ -20,6 +20,7 @@
         <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.0" />
         <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="6.0.0" />
         <PackageReference Include="Router.Data.EntityFramework" Version="2024.7.29.2" />
+        <PackageReference Include="Router.Cache" Version="2024.7.29.2" />
     </ItemGroup>
 
     <ItemGroup>
@@ -28,10 +29,6 @@
         <EmbeddedResource Include="Assets\image.png" />
         <None Remove="$(SpaRoot)**" />
         <None Include="$(SpaRoot)**" Exclude="$(SpaRoot)node_modules\**" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="People\Services" />
     </ItemGroup>
     
     <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">

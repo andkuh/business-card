@@ -29,6 +29,7 @@ namespace BusinessCard.Infrastructure
             modelBuilder.ApplyConfiguration(new DutyConfiguration());
             modelBuilder.ApplyConfiguration(new TechnologyConfiguration());
             modelBuilder.ApplyConfiguration(new HobbyConfiguration());
+            modelBuilder.ApplyConfiguration(new LinkConfiguration());
         }
         
         public DbSet<Person> People { get; set; }

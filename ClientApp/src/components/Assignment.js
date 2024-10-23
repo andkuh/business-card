@@ -2,7 +2,7 @@
 import "./Assignment.css";
 
 const Assignment = ({assignment}) => {
-    return <div>
+    return <div className="assignment">
         {assignment.name} ({formatDateToMonthAndYear(assignment.startDate)} - {formatDateToMonthAndYear(assignment.endDate)})
         <div className="assignment-summary">
             {assignment.description}

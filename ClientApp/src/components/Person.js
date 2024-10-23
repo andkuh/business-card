@@ -1,13 +1,27 @@
 ﻿import "./Person.css";
 
-const Person = ({person}) =>{
+const Person = ({person, links}) => {
     return <div className="personal">
         <div>
             {person.id &&
-            <div >
-                <h1>{person.firstName} {person.lastName}</h1>
-                <p>{person.specialization}, {person.yearsOld} y.o.</p>
-                <p>{person.location}</p>
+            <div>
+                <div>
+                    <h1>{person.firstName} {person.lastName}</h1>
+                    <p>{person.specialization}, {person.yearsOld} y.o.</p>
+                    <p>{person.location}</p>
+                </div>
+                <div>
+                    <ul>
+                        {links && links.map(s =>
+
+                            <div className={s.type.toLowerCase()}>
+                                <li key={s.value} >
+                                    <a href={s.type !== 'Email' ? s.value : 'mailto:' + s.value}>{s.type}</a>
+                                </li>
+                            </div>
+                        )}
+                    </ul>
+                </div>
             </div>
             }
 

@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using BusinessCard.Employments.Records;
+using BusinessCard.People.Records;
 
 namespace BusinessCard.Seed
 {
@@ -27,7 +29,7 @@ namespace BusinessCard.Seed
 
             person.FirstName = name;
             person.LastName = lastName;
-            person.YearsOld = (int) (DateTime.UtcNow - new DateTime(1988, 07, 21)).TotalDays / 365;
+            person.Birthday = new DateTime(1988, 07, 21);
             person.Location = "Brest, Belarus";
             person.Specialization = ".Net Developer";
             person.Image.ContentType = "image/png";
@@ -67,7 +69,8 @@ namespace BusinessCard.Seed
 
             var seniorDev = new JobTitleData()
             {
-                Name = "Software Developer", StartDate = new DateTime(2021, 11, 1), EndDate = new DateTime(2023, 4, 12)
+                Name = "Senior Software Developer", StartDate = new DateTime(2021, 11, 1),
+                EndDate = new DateTime(2023, 4, 12)
             };
 
             var html = NewTechnology("HTML");
@@ -96,13 +99,15 @@ namespace BusinessCard.Seed
 
             var angular = NewTechnology("Angular");
 
+            var react = NewTechnology("ReactJS");
+
             var mySql = NewTechnology("MySql");
 
-            NewTechnology("WPF (personal usage only)");
+            var wpf = NewTechnology("WPF");
 
-            NewTechnology("Xamarin (personal usage only)");
+            var xamarin = NewTechnology("Xamarin");
 
-            NewTechnology("Blazor (personal usage only)");
+            var blazor = NewTechnology("Blazor");
 
             var msExcel = NewTechnology("MS Excel");
 
@@ -112,6 +117,13 @@ namespace BusinessCard.Seed
 
             var winForms = NewTechnology("Windows Forms");
 
+            var dotnet6 = NewTechnology(".NET 6");
+
+            var dotnet5 = NewTechnology(".NET 5");
+
+            var dotnet31 = NewTechnology(".NET 3.1");
+
+            var microservices = NewTechnology("Microservices");
 
             AssignmentData baAssignment = new()
             {
@@ -142,6 +154,7 @@ namespace BusinessCard.Seed
                 {
                     StartDate = new DateTime(2023, 4, 13),
                     Employer = sabbatical,
+                    Type = EmploymentType.Pet,
                     Assignments = new List<AssignmentData>()
                     {
                         new()
@@ -152,7 +165,7 @@ namespace BusinessCard.Seed
                             Description =
                                 "Nuget package providing alternative, fast and easy approach to develop web api. This application uses a little piece of this lib, see the link below the source code",
 
-                            Link = new LinkData()
+                            Link = new AssignmentLinkData()
                             {
                                 Address = "https://github.com/andkuh/business-card",
                                 Caption =
@@ -162,7 +175,8 @@ namespace BusinessCard.Seed
                             Role = "Developer",
                             Technologies = new List<TechnologyData>()
                             {
-                                cSharp, efCore, rabbitMq, msSqlServer, typeScript, angular
+                                cSharp, efCore, rabbitMq, msSqlServer, typeScript, angular, blazor, css, react, dotnet5,
+                                dotnet6, microservices
                             },
                             Duties = new List<string>()
                             {
@@ -221,7 +235,8 @@ namespace BusinessCard.Seed
                                 css,
                                 rabbitMq,
                                 aspNetCore,
-                                msSqlServer
+                                msSqlServer,
+                                dotnet31, microservices
                             }
                         },
                         new()
@@ -247,7 +262,8 @@ namespace BusinessCard.Seed
                                 css,
                                 html,
                                 efCore,
-                                typeScript
+                                typeScript,
+                                dotnet31
                             }
                         },
                         new()
@@ -264,7 +280,7 @@ namespace BusinessCard.Seed
                             },
                             Technologies = new List<TechnologyData>()
                             {
-                                aspNetCore, cSharp, efCore, msSqlServer, dotnetFramework
+                                aspNetCore, cSharp, efCore, msSqlServer, dotnetFramework, dotnet31, microservices
                             }
                         },
                         new()
@@ -293,7 +309,10 @@ namespace BusinessCard.Seed
                                 efCore,
                                 msSqlServer,
                                 typeScript,
-                                kendoUi
+                                kendoUi,
+                                dotnet5,
+                                dotnet6,
+                                microservices
                             }
                         }
                     }
@@ -314,8 +333,10 @@ namespace BusinessCard.Seed
                 },
                 new()
                 {
-                    Employer = new EmployerData() {Name = "Self-Education"},
+                    Employer = new EmployerData() {Name = "Career break (Self-Education)"},
+                    Type = EmploymentType.Education,
                     StartDate = new DateTime(2016, 4, 1),
+                    EndDate = new DateTime(2017, 5, 1),
                     JobTitles = new List<JobTitleData>()
                     {
                         new()
@@ -331,22 +352,17 @@ namespace BusinessCard.Seed
                         {
                             StartDate = new DateTime(2016, 4, 1),
                             EndDate = new DateTime(2018, 4, 1),
-                            Name = "Learning ASP.NET C# Coding",
+                            Name = "Learning ASP.NET C# Development",
                             Description =
                                 "Follow my experience as I delve into the world of ASP.NET C# coding, a framework essential for web application development.",
                             Summary =
                                 "My path to mastering ASP.NET C# coding begins with grasping the fundamentals of the C# language, " +
                                 "exploring the intricacies of the ASP.NET framework, delving into web forms, MVC, and APIs, " +
                                 "honing my skills through hands-on coding challenges and projects, and keeping abreast of the ever-evolving web development landscape.",
-                            Role = "Student", Technologies = new List<TechnologyData>()
+                            Role = "Student",
+                            Technologies = new List<TechnologyData>()
                             {
-                                aspNetCore, efCore, css, html, javaScript, cSharp
-                            },
-                            Duties = new List<string>()
-                            {
-                                "Learning",
-                                "Learning",
-                                "Learning once again"
+                                aspNetCore, efCore, css, html, javaScript, cSharp, xamarin, wpf
                             }
                         }
                     },
@@ -362,12 +378,12 @@ namespace BusinessCard.Seed
                         {
                             Name = "Software Developer",
                             EndDate = new DateTime(2016, 4, 1),
-                            StartDate = new DateTime(2014, 8, 1)
+                            StartDate = new DateTime(2015, 2, 2)
                         },
                         new()
                         {
                             Name = "Economist",
-                            EndDate = new DateTime(2014, 8, 1),
+                            EndDate = new DateTime(2015, 2, 1),
                             StartDate = new DateTime(2013, 4, 1)
                         }
                     },
@@ -391,12 +407,12 @@ namespace BusinessCard.Seed
                         new()
                         {
                             EndDate = new DateTime(2016, 4, 1),
-                            StartDate = new DateTime(2013, 4, 1),
+                            StartDate = new DateTime(2013, 6, 1),
                             Name = "MS Excel driven invoicing application",
                             Summary = "Application to simplify invoicing",
                             Description =
                                 "Visual Basic for Applications driven Excel files to manage invoicing process",
-                            Role = "Economist / Developer",
+                            Role = "Developer",
                             Technologies =
                                 new List<TechnologyData>
                                 {
@@ -404,6 +420,17 @@ namespace BusinessCard.Seed
                                     vba,
                                     msExcel
                                 }
+                        },
+                        new()
+                        {
+                            EndDate = new DateTime(2015, 2, 1),
+                            StartDate = new DateTime(2013, 4, 1),
+                            Name = "Invoicing business processes",
+                            Description =
+                                "Working as economist responsible for logistic company invoicing business processes",
+                            Summary = "Pre-dev era :)",
+                            Role = "Economist",
+                            Technologies = new List<TechnologyData>()
                         }
                     }
                 }
@@ -427,6 +454,28 @@ namespace BusinessCard.Seed
                 "Musician",
                 "Bike Traveller",
                 "Cat Person",
+            };
+
+
+            person.Links = new List<LinkData>()
+            {
+                new LinkData()
+                {
+                    Type = LinkType.LinkedIn,
+                    Value = "https://www.linkedin.com/in/andrei-kuharchuk-364672127/",
+                },
+                
+                new LinkData()
+                {
+                    Type = LinkType.Email,
+                    Value = "andrewkuharchuk@gmail.com"
+                },
+
+                new LinkData()
+                {
+                    Type = LinkType.GitHub,
+                    Value = "https://github.com/andkuh"
+                }
             };
 
             return person;

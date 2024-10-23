@@ -11,16 +11,43 @@ using BusinessCard.People.Records;
 using BusinessCard.Seed;
 using BusinessCard.Technologies.Records;
 using Microsoft.EntityFrameworkCore;
+using Link = BusinessCard.People.Records.Link;
 
 namespace BusinessCard
 {
     public class Seeder
     {
+        public class SeedResult
+        {
+            public Status Status { get; set; }
+
+            public Exception Exception { get; set; }
+        }
+
+        public enum Status
+        {
+            NoRun,
+            Failed,
+            Success
+        }
+
+        public static SeedResult Result { get; } = new() {Status = Status.NoRun};
+
         public static async Task SeedAsync(Ctx context)
         {
-            var dataAsync = FactoryOfMe.Produce();
+            try
+            {
+                var dataAsync = FactoryOfMe.Produce();
 
-            await new Seeder(context).SeedAsync(dataAsync);
+                await new Seeder(context).SeedAsync(dataAsync);
+
+                Result.Status = Status.Success;
+            }
+            catch (Exception exception)
+            {
+                Result.Status = Status.Failed;
+                Result.Exception = exception;
+            }
         }
 
         private async Task SeedAsync(PersonData data)
@@ -40,6 +67,7 @@ namespace BusinessCard
                 .ThenInclude(s => s.JobTitles)
                 .Include(s => s.Hobbies)
                 .Include(s => s.EducationSteps)
+                .Include(s => s.Links)
                 .AsSplitQuery()
                 .FirstOrDefaultAsync(s =>
                     s.FirstName.Equals(data.FirstName) && s.LastName.Equals(data.LastName));
@@ -60,7 +88,17 @@ namespace BusinessCard
             person.Location = data.Location;
             person.Summary = data.Summary;
             person.Specialization = data.Specialization;
-            person.YearsOld = data.YearsOld;
+            person.Birthday = data.Birthday;
+
+            person.Links = data.Links.Synchronize(person.Links,
+                (contactData, contact) => contactData.Value == contact.Value, contactData => new Link()
+                {
+                    Value = contactData.Value
+                }, (contactData, index, contact) =>
+                {
+                    contact.Type = contactData.Type;
+                    contact.Ordinal = index;
+                });
 
             person.Hobbies = data.Hobbies
                 .Distinct()
@@ -109,6 +147,7 @@ namespace BusinessCard
                 {
                     employment.EndDate = employmentData.EndDate;
                     employment.StartDate = employmentData.StartDate;
+                    employment.Type = employmentData.Type;
                     employment.JobTitles = employmentData.JobTitles.Synchronize
                     (
                         targetList: employment.JobTitles,
@@ -140,7 +179,8 @@ namespace BusinessCard
                                 }, existingList: technologies);
 
                             assignment.Link = assignmentData.Link != null
-                                ? MapLink(assignmentData.Link, assignment.Link ?? new Link())
+                                ? MapLink(assignmentData.Link,
+                                    assignment.Link ?? new Employments.Records.AssignmentLink())
                                 : null;
 
                             assignment.Duties = assignmentData
@@ -151,7 +191,8 @@ namespace BusinessCard
                 }
             );
 
-            Link MapLink(LinkData linkData, Link link)
+            Employments.Records.AssignmentLink MapLink(AssignmentLinkData linkData,
+                Employments.Records.AssignmentLink link)
             {
                 link.Address = linkData.Address;
                 link.Caption = linkData.Caption;
@@ -224,7 +265,7 @@ namespace BusinessCard
             this IEnumerable<TSource> sourceList,
             IEnumerable<TTarget> targetList,
             Func<TSource, TTarget, bool> matchPredicate,
-            Func<TSource, TTarget> targetItemFactory, Action<TSource, TTarget>? map = null,
+            Func<TSource, TTarget> targetItemFactory, Action<TSource, int, TTarget>? map,
             List<TTarget>? existingList = null)
         {
             var sourceItems = sourceList?.ToList() ?? new List<TSource>();
@@ -233,41 +274,54 @@ namespace BusinessCard
 
             IEnumerable<TTarget> pool = existingList ?? targets;
 
-            foreach (var sourceItem in sourceItems)
+            for (var index = 0; index < sourceItems.Count; index++)
             {
+                var sourceItem = sourceItems[index];
                 var existingTargetItem = pool.FirstOrDefault(t => matchPredicate(sourceItem, t));
 
                 if (existingTargetItem != null)
                 {
-                    // Update existing target item with source item
-                    map?.Invoke(sourceItem, existingTargetItem);
-                    // Update other properties as needed
+                    map?.Invoke(sourceItem, index, existingTargetItem);
                 }
                 else
                 {
-                    // Create a new target item using the factory delegate
-                    var newTargetItem = targetItemFactory(sourceItem);
+                    existingTargetItem = targetItemFactory(sourceItem);
 
-                    map?.Invoke(sourceItem, newTargetItem);
+                    map?.Invoke(sourceItem, index, existingTargetItem);
 
-                    targets.Add(newTargetItem);
+                    existingList?.Add(existingTargetItem);
+                }
 
-                    existingList?.Add(newTargetItem);
+                if (!targets.Any(s => matchPredicate(sourceItem, s)))
+                {
+                    targets.Add(existingTargetItem);
                 }
             }
 
-            // Remove items from the target list that do not have a corresponding source item
             targets.RemoveAll(t => !sourceItems.Any(s => matchPredicate(s, t)));
-
 
             return targets;
         }
-    }
 
-    public interface IStrategy
-    {
-        TTarget Find<TSource, TTarget>(Func<TSource, TTarget, bool> matchPredicate);
-
-        void Add();
+        public static List<TTarget> Synchronize<TSource, TTarget>(
+            this IEnumerable<TSource> sourceList,
+            IEnumerable<TTarget> targetList,
+            Func<TSource, TTarget, bool> matchPredicate,
+            Func<TSource, TTarget> targetItemFactory, Action<TSource, TTarget>? map = null,
+            List<TTarget>? existingList = null)
+        {
+            return sourceList.Synchronize(targetList, matchPredicate, targetItemFactory, (s, _, t) => map?.Invoke(s, t),
+                existingList);
+        }
+        
+        
+        public static int YearsBetween(this DateTime startDate, DateTime? endDate = null)
+        {
+            var timeSpan = (endDate ?? DateTime.UtcNow) - startDate;
+            
+            var years = (int)Math.Floor((double)timeSpan.Days / 365.25);
+            
+            return years;
+        }
     }
 }
