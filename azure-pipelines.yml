@@ -55,4 +55,4 @@ steps:
     repository: 'businesscard'
     command: 'buildAndPush'
     Dockerfile: '$(Build.ArtifactStagingDirectory)/Dockerfile'
-    buildContext: '$(Build.ArtifactStagingDirectory)'
+    buildArguments: '--build-arg PAT=$(Artifactory_Token)'
