@@ -27,3 +27,6 @@ steps:
     containerRegistry: 'docker'
     repository: 'andkuh/businesscard'
     command: 'push'
+    tags: |
+      latest
+      $(Build.BuildId)
