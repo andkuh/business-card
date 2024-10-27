@@ -9,12 +9,6 @@ trigger:
 pool:
   vmImage: 'ubuntu-latest'
 
-variables:
-  feed_name: '$(feed_name)'
-  user_name: '$(user_name)'
-  personal_access_token: '$(personal_access_token)'
-  feed_path: '$(feed_path)'
-
 steps:
   
 - task: Docker@2
