@@ -1,4 +1,11 @@
-﻿# Define build-time arguments
+﻿FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
+WORKDIR /app
+EXPOSE 80
+EXPOSE 443
+
+FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
+
+# Define build-time arguments
 ARG FeedName
 ARG UserName
 ARG PersonalAccessToken
@@ -9,13 +16,6 @@ ENV FEED_NAME=$FeedName
 ENV USERNAME=$UserName
 ENV ACCESS_TOKEN=$PersonalAccessToken
 ENV FEED_PATH=$FeedPath
-
-FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS base
-WORKDIR /app
-EXPOSE 80
-EXPOSE 443
-
-FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 
 # Install Node.js
 RUN curl -fsSL https://deb.nodesource.com/setup_14.x | bash - \
