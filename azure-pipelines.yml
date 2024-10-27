@@ -18,6 +18,9 @@ steps:
     command: 'build'
     Dockerfile: '**/Dockerfile'
     arguments: '--build-arg FeedName=$(feed_name) --build-arg UserName=$(user_name) --build-arg PersonalAccessToken=$(personal_access_token) --build-arg FeedPath=$(feed_path)'
+    tags: |
+      latest
+      $(Build.BuildId)
 - task: Docker@2
   inputs:
     containerRegistry: 'docker'
