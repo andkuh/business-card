@@ -15,6 +15,11 @@ steps:
   inputs:
     containerRegistry: 'docker'
     repository: 'businesscard'
-    command: 'buildAndPush'
+    command: 'build'
     Dockerfile: '**/Dockerfile'
-    arguments: 'feed_name=$(feed_name) user_name=$(user_name) personal_access_token=$(personal_access_token) feed_path=$(feed_path)'
+    arguments: '--build-arg feed_name=$(feed_name) --build-arg user_name=$(user_name) --build-arg personal_access_token=$(personal_access_token) --build-arg feed_path=$(feed_path)'
+- task: Docker@2
+  inputs:
+    containerRegistry: 'docker'
+    repository: 'businesscard'
+    command: 'push'
