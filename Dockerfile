@@ -1,8 +1,8 @@
 ﻿# Define build-time arguments
-ARG FeedName=feed_name
-ARG UserName=user_name
-ARG PersonalAccessToken=personal_access_token
-ARG FeedPath=feed_path
+ARG FeedName
+ARG UserName
+ARG PersonalAccessToken
+ARG FeedPath
 
 # Use the build-time arguments in the Dockerfile
 ENV FEED_NAME=$FeedName

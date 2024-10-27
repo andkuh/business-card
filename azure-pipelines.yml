@@ -17,7 +17,7 @@ steps:
     repository: 'businesscard'
     command: 'build'
     Dockerfile: '**/Dockerfile'
-    arguments: '--build-arg feed_name=$(feed_name) --build-arg user_name=$(user_name) --build-arg personal_access_token=$(personal_access_token) --build-arg feed_path=$(feed_path)'
+    arguments: '--build-arg FeedName=$(feed_name) --build-arg UserName=$(user_name) --build-arg PersonalAccessToken=$(personal_access_token) --build-arg FeedPath=$(feed_path)'
 - task: Docker@2
   inputs:
     containerRegistry: 'docker'
