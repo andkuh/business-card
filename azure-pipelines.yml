@@ -54,5 +54,5 @@ steps:
     containerRegistry: 'docker'
     repository: 'businesscard'
     command: 'buildAndPush'
-    Dockerfile: '**/Dockerfile'
+    Dockerfile: '$(Build.ArtifactStagingDirectory)/Dockerfile'
     buildContext: '$(Build.ArtifactStagingDirectory)'
