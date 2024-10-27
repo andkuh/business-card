@@ -17,7 +17,7 @@ ENV USERNAME=$UserName
 ENV ACCESS_TOKEN=$PersonalAccessToken
 ENV FEED_PATH=$FeedPath
 
-RUN dotnet nuget add source "$FEED_PATH" --name "$FEED_NAME" --username "$USERNAME" --password "$ACCESS_TOKEN" --valid-authentication-types "basic"
+RUN dotnet nuget add source "$FEED_PATH" --name "$FEED_NAME" --username "$USERNAME" --password "$ACCESS_TOKEN" --valid-authentication-types "basic" --store-password-in-clear-text
 
 # Install Node.js
 RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
