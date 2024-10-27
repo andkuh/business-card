@@ -17,13 +17,13 @@ ENV USERNAME=$UserName
 ENV ACCESS_TOKEN=$PersonalAccessToken
 ENV FEED_PATH=$FeedPath
 
+RUN dotnet nuget add source FEED_PATH --name FEED_NAME --username USERNAME --password ACCESS_TOKEN
+
 # Install Node.js
-RUN curl -fsSL https://deb.nodesource.com/setup_14.x | bash - \
+RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
     && apt-get install -y \
         nodejs \
     && rm -rf /var/lib/apt/lists/*
-
-RUN dotnet add source FEED_PATH --name FEED_NAME --username USERNAME --password ACCESS_TOKEN
 
 WORKDIR /src
 COPY ["BusinessCard.csproj", "./"]
