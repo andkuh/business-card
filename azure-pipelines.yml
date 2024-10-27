@@ -6,52 +6,11 @@
 trigger:
 - master
 
-pool:
-  vmImage: 'windows-latest'
-
-variables:
-  solution: '**/*.sln'
-  buildPlatform: 'Any CPU'
-  buildConfiguration: 'Release'
-  ftp: '$(FTP_SERVER)'
-  username: '$(FTP_USERNAME)'
-  password: '$(FTP_PASSWORD)'
-  restoreBuildProjects: '**/*.csproj'
-
 steps:
 
-- script: 'echo $(ftp)'
-- script: 'echo $(username)'
-- script: 'echo $(password)'
-  
-- task: NodeTool@0
+- task: Docker@2
   inputs:
-    versionSource: 'spec'
-    versionSpec: '18.x'
-    checkLatest: true
-
-- task: DotNetCoreCLI@2
-  displayName: Restore
-  inputs:
-    command: 'restore'
-    projects: '$(restoreBuildProjects)'
-    feedsToUse: 'select'
-    vstsFeed: 'eafe52e3-fd8f-47c6-8048-f3b46c3ef9e9/cfd6d15a-3352-41cb-9ab6-23962f3d3db1'
-    verbosityRestore: 'Detailed'
-
-- task: DotNetCoreCLI@2
-  inputs:
-    command: 'publish'
-    publishWebProjects: true
-    arguments: '--configuration Release --output $(Build.ArtifactStagingDirectory)'
-    zipAfterPublish: true
-
-- task: FtpUpload@2
-  inputs:
-    credentialsOption: 'inputs'
-    serverUrl: '$(ftp)'
-    username: '$(username)'
-    password: '$(password)'
-    rootDirectory: '$(Build.ArtifactStagingDirectory)'
-    remoteDirectory: '/app'
-    clean: true
+    containerRegistry: 'docker'
+    repository: 'businesscard'
+    command: 'buildAndPush'
+    Dockerfile: '**/Dockerfile'
