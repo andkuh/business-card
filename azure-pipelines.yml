@@ -10,49 +10,17 @@ pool:
   vmImage: 'ubuntu-latest'
 
 variables:
-  solution: '**/*.sln'
-  buildPlatform: 'Any CPU'
-  buildConfiguration: 'Release'
-  ftp: '$(FTP_SERVER)'
-  username: '$(FTP_USERNAME)'
-  password: '$(FTP_PASSWORD)'
-  restoreBuildProjects: '**/*.csproj'
+  feed_name: '$(feed_name)'
+  user_name: '$(user_name)'
+  personal_access_token: '$(personal_access_token)'
+  feed_path: '$(feed_path)'
 
 steps:
   
-- task: NodeTool@0
-  inputs:
-    versionSource: 'spec'
-    versionSpec: '18.x'
-    checkLatest: true
-
-- task: DotNetCoreCLI@2
-  displayName: Restore
-  inputs:
-    command: 'restore'
-    projects: '$(restoreBuildProjects)'
-    feedsToUse: 'select'
-    vstsFeed: 'eafe52e3-fd8f-47c6-8048-f3b46c3ef9e9/cfd6d15a-3352-41cb-9ab6-23962f3d3db1'
-    verbosityRestore: 'Detailed'
-
-- task: DotNetCoreCLI@2
-  inputs:
-    command: 'publish'
-    publishWebProjects: true
-    arguments: '--configuration Release --output $(Build.ArtifactStagingDirectory)'
-    zipAfterPublish: true
-
-- task: CopyFiles@2
-  displayName: 'Copy Dockerfile'
-  inputs:
-    SourceFolder: '$(Build.SourcesDirectory)'
-    Contents: '**/Dockerfile'
-    TargetFolder: '$(Build.ArtifactStagingDirectory)'
-
 - task: Docker@2
   inputs:
     containerRegistry: 'docker'
     repository: 'businesscard'
     command: 'buildAndPush'
-    Dockerfile: '$(Build.ArtifactStagingDirectory)/Dockerfile'
+    Dockerfile: '**/Dockerfile'
     arguments: 'feed_name=$(feed_name) user_name=$(user_name) personal_access_token=$(personal_access_token) feed_path=$(feed_path)'
