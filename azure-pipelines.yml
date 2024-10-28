@@ -19,8 +19,8 @@ steps:
     Dockerfile: '**/Dockerfile'
     arguments: '--build-arg FeedName=$(feed_name) --build-arg UserName=$(user_name) --build-arg PersonalAccessToken=$(personal_access_token) --build-arg FeedPath=$(feed_path)'
     tags: |
-      latest
       $(Build.BuildId)
+      latest
 - task: Docker@2
   inputs:
     containerRegistry: 'docker'
@@ -31,5 +31,5 @@ steps:
     repository: 'andkuh/businesscard'
     command: 'push'
     tags: |
-      latest
       $(Build.BuildId)
+      latest
