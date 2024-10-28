@@ -5,8 +5,22 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 
+# Define build-time arguments
+ARG FeedName
+ARG UserName
+ARG PersonalAccessToken
+ARG FeedPath
+
+# Use the build-time arguments in the Dockerfile
+ENV FEED_NAME=$FeedName
+ENV USERNAME=$UserName
+ENV ACCESS_TOKEN=$PersonalAccessToken
+ENV FEED_PATH=$FeedPath
+
+RUN dotnet nuget add source "$FEED_PATH" --name "$FEED_NAME" --username "$USERNAME" --password "$ACCESS_TOKEN" --valid-authentication-types "basic" --store-password-in-clear-text
+
 # Install Node.js
-RUN curl -fsSL https://deb.nodesource.com/setup_14.x | bash - \
+RUN curl -fsSL https://deb.nodesource.com/setup_20.x | bash - \
     && apt-get install -y \
         nodejs \
     && rm -rf /var/lib/apt/lists/*

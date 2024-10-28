@@ -1,0 +1,35 @@
+# ASP.NET Core (.NET Framework)
+# Build and test ASP.NET Core projects targeting the full .NET Framework.
+# Add steps that publish symbols, save build artifacts, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
+
+trigger:
+- master
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+  
+- task: Docker@2
+  inputs:
+    containerRegistry: 'docker'
+    repository: 'andkuh/businesscard'
+    command: 'build'
+    Dockerfile: '**/Dockerfile'
+    arguments: '--build-arg FeedName=$(feed_name) --build-arg UserName=$(user_name) --build-arg PersonalAccessToken=$(personal_access_token) --build-arg FeedPath=$(feed_path)'
+    tags: |
+      latest
+      $(Build.BuildId)
+- task: Docker@2
+  inputs:
+    containerRegistry: 'docker'
+    command: 'login'
+- task: Docker@2
+  inputs:
+    containerRegistry: 'docker'
+    repository: 'andkuh/businesscard'
+    command: 'push'
+    tags: |
+      latest
+      $(Build.BuildId)
