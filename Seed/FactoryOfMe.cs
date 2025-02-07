@@ -462,7 +462,7 @@ namespace BusinessCard.Seed
                 new LinkData()
                 {
                     Type = LinkType.LinkedIn,
-                    Value = "https://www.linkedin.com/in/andrei-kuharchuk/",
+                    Value = "https://www.linkedin.com/in/andrei-kukharchuk/",
                 },
                 
                 new LinkData()
